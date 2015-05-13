@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Wetter</string>
+    <string name="about">Über diese App</string>
+    <string name="action_exit">Beenden</string>
+    <string name="action_settings">Einstellungen</string>
+    <string name="close">Schließen</string>
+    <string name="drawer_open">Öffnen</string>
+    <!-- navigation drawer item labels  -->
+    <string-array name="nav_drawer_labels">
+        <item>Wettervorhersage</item>
+        <item>Hilfe &amp; Support</item>
+        <item>Über diese App</item>
+        <item>Einstellungen</item>
+    </string-array>
+    <string name="unknown_error">Ein Fehler ist aufgetreten :(</string>
+    <string name="windspeed">Windgeschwindigkeit</string>
+    <string name="humidity">Luftfeuchtigkeit</string>
+    <string name="pressure">Luftdruck</string>
+    <string name="sunrise">Sonnenaufgang</string>
+    <string name="sunset">Sonnenuntergang</string>
+    <string name="refresh">Aktualisieren</string>
+    <string name="downloading_data">Heruterladen der Daten...</string>
+    <string name="nav_item_settings">Einstellungen</string>
+    <string name="nav_item_weather">Wettervorhersage</string>
+    <string name="title_help_and_support">Hilfe &amp; Support</string>
+    <string name="title_settings">Einstellungen</string>
+    <string name="nav_item_help_and_support">Hilfe &amp; Support</string>
+</resources>
