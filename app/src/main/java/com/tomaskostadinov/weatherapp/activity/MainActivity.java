@@ -1,6 +1,8 @@
 package com.tomaskostadinov.weatherapp.activity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
@@ -35,13 +37,15 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
     Integer stat = 0;
     ImageView todayStat;
     ScrollView sv;
-    String url = "Heidenheim an der Brenz";
+    String url = "";
     WeatherHelper wh;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        SharedPreferences prefs = this.getSharedPreferences("Location", Context.MODE_PRIVATE);
+        url = prefs.getString("location", null);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         mToolbar.setSubtitle(url);
@@ -68,6 +72,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         getWeatherData();
         sv.setVisibility(View.GONE);
         wh = new WeatherHelper();
+
     }
 
     public void getWeatherData(){

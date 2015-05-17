@@ -8,6 +8,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 
 import com.tomaskostadinov.weatherapp.R;
 
@@ -17,6 +18,7 @@ import com.tomaskostadinov.weatherapp.R;
 public class SettingsActivity extends ActionBarActivity {
 
     private Toolbar mToolbar;
+    EditText et;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,18 +34,17 @@ public class SettingsActivity extends ActionBarActivity {
             }
         });
         Button clickButton = (Button) findViewById(R.id.button);
+        et   = (EditText)findViewById(R.id.editText);
         clickButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.google.com"));
-                //startActivity(browserIntent);
                 SharedPreferences pref = getApplicationContext().getSharedPreferences("Location", MODE_PRIVATE);
                 SharedPreferences.Editor editor = pref.edit();
                 //editor.putBoolean("key_name1", true);           // Saving boolean - true/false
                 //editor.putInt("key_name2", "int value");        // Saving integer
                 //editor.putFloat("key_name3", "float value");    // Saving float
                 //editor.putLong("key_name4", "long value");      // Saving long
-                editor.putString("location", "Heidenheim an der Brenz");  // Saving string
+                editor.putString("location",  et.getText().toString());  // Saving string
                 editor.apply(); // commit changes
                 startActivity(new Intent(getApplicationContext(), MainActivity.class));
             }
