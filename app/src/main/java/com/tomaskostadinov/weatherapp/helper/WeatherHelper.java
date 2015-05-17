@@ -13,16 +13,16 @@ import java.util.Date;
  */
 public class WeatherHelper {
 
-    public Double kelvin = 272.15;
-    public String city;
-    public String description;
-    public Integer weatherid;
-    public Integer sunrise;
-    public Integer sunset;
-    public Double temperature_max;
-    public Integer humidity;
-    public Integer pressure;
-    public Double speed;
+    private Double kelvin = 272.15;
+    private String city = "lol";
+    private String description;
+    private Integer weatherid;
+    private Integer sunrise;
+    private Integer sunset;
+    private Double temperature_max;
+    private Integer humidity;
+    private Integer pressure;
+    private Double speed;
     Integer istat = R.drawable.ic_sunny;
 
 
@@ -31,7 +31,7 @@ public class WeatherHelper {
     }
 
     public void setDescription(String in){
-        city = in;
+        description = in;
     }
 
     public void setWeatherId(Integer in){
@@ -65,7 +65,6 @@ public class WeatherHelper {
     public String getCity(){
         return city;
     }
-
     public String getDescription(){
         return description;
     }

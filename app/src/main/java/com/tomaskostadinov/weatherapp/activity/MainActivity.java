@@ -31,7 +31,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
     private FragmentDrawer drawerFragment;
     private String url1 = "http://api.openweathermap.org/data/2.5/weather?q=";
     private ServiceHandler obj;
-    TextView temp, l, windspeed, press, hum, suns, sunr, desc;
+    TextView temp, loca, windspeed, press, hum, suns, sunr, desc;
     Integer stat = 0;
     ImageView todayStat;
     ScrollView sv;
@@ -56,7 +56,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         displayView(0);
 
         temp = (TextView)findViewById(R.id.t);
-        l = (TextView)findViewById(R.id.l);
+        loca = (TextView)findViewById(R.id.l);
         windspeed = (TextView)findViewById(R.id.windspeed);
         press = (TextView)findViewById(R.id.pressure);
         hum = (TextView)findViewById(R.id.humidity);
@@ -111,19 +111,15 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
     }
 
     void UpdateData(){
-        try {
-            temp.setText(String.format("%.1f", wh.getTemperature_max()) + "°");
-            l.setText(wh.getCity());
-            desc.setText(wh.getDescription());
-            windspeed.setText(getResources().getString(R.string.windspeed) + ": " + wh.getSpeed().toString() + " km/h");
-            hum.setText(getResources().getString(R.string.humidity) + ": " + wh.getHumidity().toString() + "%");
-            press.setText(getResources().getString(R.string.pressure) + ": " + wh.getPressure().toString() + " hPa");
-            sunr.setText(getResources().getString(R.string.sunrise) + ": " + wh.convertTime(wh.getSunrise()) + " Uhr");
-            suns.setText(getResources().getString(R.string.sunset) + ": " + wh.convertTime(wh.getSunset()) + " Uhr");
-            todayStat.setImageResource(wh.convertWeather(wh.getWeatherid()));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        loca.setText(wh.getCity());
+        temp.setText(String.format("%.1f", wh.getTemperature_max()) + "°");
+        desc.setText(wh.getDescription());
+        windspeed.setText(getResources().getString(R.string.windspeed) + ": " + wh.getSpeed().toString() + " km/h");
+        hum.setText(getResources().getString(R.string.humidity) + ": " + wh.getHumidity().toString() + "%");
+        press.setText(getResources().getString(R.string.pressure) + ": " + wh.getPressure().toString() + " hPa");
+        sunr.setText(getResources().getString(R.string.sunrise) + ": " + wh.convertTime(wh.getSunrise()) + " Uhr");
+        suns.setText(getResources().getString(R.string.sunset) + ": " + wh.convertTime(wh.getSunset()) + " Uhr");
+        todayStat.setImageResource(wh.convertWeather(wh.getWeatherid()));
     }
 
 
