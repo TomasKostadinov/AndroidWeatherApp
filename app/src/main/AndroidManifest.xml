@@ -18,7 +18,7 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
+        </activity>MainActivity
         <activity
             android:name=".activity.AboutActivity"
             android:label="@string/about" >
@@ -26,6 +26,10 @@
         <activity
             android:name=".activity.LicenseActivity"
             android:label="@string/about" >
+        </activity>
+        <activity
+            android:name=".activity.SettingsActivity"
+            android:label="@string/title_settings" >
         </activity>
 </application>
 </manifest>

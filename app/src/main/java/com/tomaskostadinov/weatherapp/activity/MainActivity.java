@@ -12,18 +12,16 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
+
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.nispok.snackbar.Snackbar;
 import com.nispok.snackbar.SnackbarManager;
 import com.tomaskostadinov.weatherapp.R;
 import com.tomaskostadinov.weatherapp.helper.ServiceHandler;
+import com.tomaskostadinov.weatherapp.helper.WeatherHelper;
 
 import org.apache.http.Header;
-import org.json.*;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class MainActivity extends ActionBarActivity implements FragmentDrawer.FragmentDrawerListener {
 
@@ -35,9 +33,10 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
     private ServiceHandler obj;
     TextView temp, l, windspeed, press, hum, suns, sunr, desc;
     Integer stat = 0;
-    String url = "Heidenheim an der Brenz";
     ImageView todayStat;
     ScrollView sv;
+    String url = "Heidenheim an der Brenz";
+    WeatherHelper wh;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +45,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         mToolbar.setSubtitle(url);
+        mToolbar.setBackgroundDrawable(getResources().getDrawable(R.drawable.header_bg));
         //mToolbar.setLogo(R.mipmap.ic_launcher);
         //getSupportActionBar().setDisplayShowHomeEnabled(true);
         drawerFragment = (FragmentDrawer)
@@ -64,10 +64,12 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         suns = (TextView)findViewById(R.id.sunset);
         desc = (TextView)findViewById(R.id.desc);
         todayStat = (ImageView) findViewById(R.id.stattoday);
-        sv = (ScrollView) findViewById(R.id.sv);
+        sv = (ScrollView) findViewById(R.id.scroll_view);
         getWeatherData();
         sv.setVisibility(View.GONE);
+        wh = new WeatherHelper();
     }
+
     public void getWeatherData(){
         AsyncHttpClient client = new AsyncHttpClient();
         client.get("http://api.openweathermap.org/data/2.5/weather?q=" + url + ",DE&lang=de", new AsyncHttpResponseHandler() {
@@ -87,9 +89,11 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
                 // called when response HTTP status is "200 OK"
                 String in = new String(response);
                 if(in != ""){
-                    UpdateData(in);
+                    wh.ParseData(in);
+                    UpdateData();
                     sv.setVisibility(View.VISIBLE);
                 } else {
+                    sv.setVisibility(View.GONE);
                 }
             }
 
@@ -105,143 +109,24 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
             }
         });
     }
-    void UpdateData(String in){
+
+    void UpdateData(){
         try {
-            Double kelvin = 272.15;
-            JSONObject reader = new JSONObject(in);
-            String city = reader.getString("name");
-
-            JSONArray weather  = reader.getJSONArray("weather");
-            JSONObject JSONWeather = weather.getJSONObject(0);
-            String description = JSONWeather.getString("description");
-            Integer weatherid = JSONWeather.getInt("id");
-
-            JSONObject sys  = reader.getJSONObject("sys");
-            //String country = sys.getString("country");
-            Integer sunrise = sys.getInt("sunrise");
-            Integer sunset = sys.getInt("sunset");
-
-            JSONObject main  = reader.getJSONObject("main");
-            //Integer temperature_min = main.getInt("temp_min");
-            Double temperature_max = main.getDouble("temp_max");
-            Integer humidity = main.getInt("humidity");
-            Integer pressure = main.getInt("pressure");
-
-            JSONObject wind  = reader.getJSONObject("wind");
-            Double speed = wind.getDouble("speed");
-            //temperature_min =  Math.round(temperature_min) - kelvin;
-            temperature_max =  temperature_max - kelvin;
-            temp.setText(String.format("%.1f", temperature_max) + "°");
-            l.setText(city);
-            desc.setText(description);
-            windspeed.setText(getResources().getString(R.string.windspeed) + ": " + speed.toString() + " km/h");
-            hum.setText(getResources().getString(R.string.humidity) + ": " + humidity.toString() + "%");
-            press.setText(getResources().getString(R.string.pressure) + ": " + pressure.toString() + " hPa");
-            sunr.setText(getResources().getString(R.string.sunrise) + ": " + convertTime(sunrise) + " Uhr");
-            suns.setText(getResources().getString(R.string.sunset) + ": " + convertTime(sunset) + " Uhr");
-            todayStat.setImageResource(convertWeather(weatherid));
+            temp.setText(String.format("%.1f", wh.getTemperature_max()) + "°");
+            l.setText(wh.getCity());
+            desc.setText(wh.getDescription());
+            windspeed.setText(getResources().getString(R.string.windspeed) + ": " + wh.getSpeed().toString() + " km/h");
+            hum.setText(getResources().getString(R.string.humidity) + ": " + wh.getHumidity().toString() + "%");
+            press.setText(getResources().getString(R.string.pressure) + ": " + wh.getPressure().toString() + " hPa");
+            sunr.setText(getResources().getString(R.string.sunrise) + ": " + wh.convertTime(wh.getSunrise()) + " Uhr");
+            suns.setText(getResources().getString(R.string.sunset) + ": " + wh.convertTime(wh.getSunset()) + " Uhr");
+            todayStat.setImageResource(wh.convertWeather(wh.getWeatherid()));
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    String convertTime(Integer Time){
-        Date date = new Date(Time*1000L); // *1000 is to convert seconds to milliseconds
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss"); // the format of your date
-        //sdf.setTimeZone(TimeZone.getTimeZone("GMT+2")); // give a timezone reference for formating (see comment at the bottom
-        String formattedDate = sdf.format(date);
-        return formattedDate;
-    }
 
-    Integer convertWeather(Integer ID){
-        Integer istat = R.drawable.ic_sunny;
-        switch (ID){
-            case 200:
-            case 201:
-            case 202:
-            case 210:
-            case 211:
-            case 212:
-            case 221:
-            case 230:
-            case 231:
-            case 232:
-                istat = R.drawable.ic_rain;
-                break;
-            case 300:
-            case 301:
-            case 302:
-            case 310:
-            case 311:
-            case 312:
-            case 313:
-            case 314:
-            case 321:
-                istat = R.drawable.ic_rain;
-                break;
-            case 500:
-            case 501:
-            case 502:
-            case 503:
-            case 504:
-            case 511:
-            case 520:
-            case 521:
-            case 522:
-            case 531:
-                istat = R.drawable.ic_rain;
-                break;
-            case 600:
-            case 601:
-            case 602:
-            case 611:
-            case 612:
-            case 615:
-            case 616:
-            case 620:
-            case 621:
-            case 622:
-                istat = R.drawable.ic_rain;
-                //stat = R.drawable.ic_snow;
-                break;
-            case 700:
-            case 711:
-            case 721:
-            case 731:
-            case 741:
-            case 751:
-            case 761:
-            case 762:
-            case 771:
-            case 781:
-                istat = R.drawable.ic_cloud;
-                break;
-            case 800:
-                istat = R.drawable.ic_sunny;
-                break;
-            case 801:
-            case 802:
-                istat = R.drawable.ic_cloudy;
-                break;
-            case 803:
-            case 804:
-                istat = R.drawable.ic_cloud;
-                break;
-            case 900:
-            case 901:
-            case 902:
-            case 903:
-            case 904:
-            case 905:
-            case 906:
-                istat = R.drawable.ic_cloud;
-                break;
-            default:
-                istat = R.drawable.ic_sunny;
-                break;
-        }
-        return istat;
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -268,7 +153,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
                             .actionLabel(R.string.close)
                             .actionColor(Color.parseColor("#ff1744"))
                             .duration(Snackbar.SnackbarDuration.LENGTH_LONG));
-            //startActivity(new Intent(getApplicationContext(), SignUpActivity.class));
+            startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
             return true;
         }
 
@@ -297,7 +182,6 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
     }
 
     private void displayView(int position) {
-        String title = getString(R.string.app_name);
         switch (position) {
             case 0:
                 //startActivity(new Intent(getApplicationContext(), MainActivity.class));

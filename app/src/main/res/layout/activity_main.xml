@@ -19,18 +19,24 @@
             android:orientation="vertical">
             <include
                 android:id="@+id/toolbar"
-                layout="@layout/toolbar" />
+                layout="@layout/toolbar_home" />
         </LinearLayout>
         <FrameLayout
             android:id="@+id/container_body"
             android:layout_width="fill_parent"
             android:layout_height="0dp"
             android:layout_weight="1" />
-        <ScrollView
+        <!--<ScrollView
             android:id="@+id/sv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="?attr/actionBarSize">
+            android:layout_marginBottom="?attr/actionBarSize">-->
+            <com.tomaskostadinov.weatherapp.helper.NotifyingScrollView
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/scroll_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="128dp">
 
             <LinearLayout
                 android:orientation="vertical"
@@ -182,7 +188,7 @@
 
                     </LinearLayout>
                 </android.support.v7.widget.CardView>
-                <!--<android.support.v7.widget.CardView
+                <android.support.v7.widget.CardView
                     xmlns:card_view="http://schemas.android.com/apk/res-auto"
                     android:id="@+id/forecast"
                     android:layout_marginTop="4dp"
@@ -234,9 +240,9 @@
                         </RelativeLayout>
 
                     </LinearLayout>
-            </android.support.v7.widget.CardView>-->
+            </android.support.v7.widget.CardView>
             </LinearLayout>
-        </ScrollView>
+        </com.tomaskostadinov.weatherapp.helper.NotifyingScrollView>
         <RelativeLayout
             android:id="@+id/error"
             android:layout_width="match_parent"
