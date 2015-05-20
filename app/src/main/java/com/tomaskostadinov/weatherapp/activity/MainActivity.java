@@ -25,13 +25,15 @@ import com.tomaskostadinov.weatherapp.helper.WeatherHelper;
 
 import org.apache.http.Header;
 
+import java.net.InetAddress;
+import java.net.Socket;
+
 public class MainActivity extends ActionBarActivity implements FragmentDrawer.FragmentDrawerListener {
 
     private static String TAG = MainActivity.class.getSimpleName();
 
     private Toolbar mToolbar;
     private FragmentDrawer drawerFragment;
-    private String url1 = "http://api.openweathermap.org/data/2.5/weather?q=";
     private ServiceHandler obj;
     TextView temp, loca, windspeed, press, hum, suns, sunr, desc;
     Integer stat = 0;
@@ -144,16 +146,6 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-
-            /**
-             * Taken from https://github.com/nispok/snackbar
-             */
-            SnackbarManager.show(
-                    Snackbar.with(this)
-                            .text(String.format("Noch nicht vorhanden :("))
-                            .actionLabel(R.string.close)
-                            .actionColor(Color.parseColor("#ff1744"))
-                            .duration(Snackbar.SnackbarDuration.LENGTH_LONG));
             startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
             return true;
         }
@@ -194,10 +186,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
                 startActivity(new Intent(getApplicationContext(), AboutActivity.class));
                 break;
             case 3:
-                //startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                break;
-            case 4:
-                //startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
                 break;
             default:
                 break;
