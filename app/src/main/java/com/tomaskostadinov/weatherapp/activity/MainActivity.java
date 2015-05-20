@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,7 +29,7 @@ import org.apache.http.Header;
 import java.net.InetAddress;
 import java.net.Socket;
 
-public class MainActivity extends ActionBarActivity implements FragmentDrawer.FragmentDrawerListener {
+public class MainActivity extends AppCompatActivity implements FragmentDrawer.FragmentDrawerListener {
 
     private static String TAG = MainActivity.class.getSimpleName();
 

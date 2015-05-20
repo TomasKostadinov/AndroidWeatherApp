@@ -3,7 +3,7 @@ package com.tomaskostadinov.weatherapp.activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.View;
@@ -15,7 +15,7 @@ import com.tomaskostadinov.weatherapp.R;
 /**
  * Created by Tomas on 13.05.2015.
  */
-public class SettingsActivity extends ActionBarActivity {
+public class SettingsActivity extends AppCompatActivity {
 
     private Toolbar mToolbar;
     EditText et;
