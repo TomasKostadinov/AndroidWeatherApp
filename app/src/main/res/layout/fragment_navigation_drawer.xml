@@ -7,9 +7,9 @@
     <RelativeLayout
         android:id="@+id/nav_header_container"
         android:layout_width="match_parent"
-        android:layout_height="140dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:background="@color/colorPrimary">
+        android:background="@drawable/header_bg">
 
         <ImageView
             android:layout_width="70dp"

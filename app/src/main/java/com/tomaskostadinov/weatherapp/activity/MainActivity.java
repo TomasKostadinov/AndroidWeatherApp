@@ -3,10 +3,8 @@ package com.tomaskostadinov.weatherapp.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -26,8 +24,7 @@ import com.tomaskostadinov.weatherapp.helper.WeatherHelper;
 
 import org.apache.http.Header;
 
-import java.net.InetAddress;
-import java.net.Socket;
+import android.os.Handler;
 
 public class MainActivity extends AppCompatActivity implements FragmentDrawer.FragmentDrawerListener {
 
@@ -42,6 +39,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     ScrollView sv;
     String url = "";
     WeatherHelper wh;
+    private Handler mHandler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +73,22 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         getWeatherData();
         sv.setVisibility(View.GONE);
         wh = new WeatherHelper();
+        mHandler.postDelayed(new Runnable() {
+            public void run() {
+                mHandler.postDelayed(new Runnable() {
+                    public void run() {
+                        mHandler.postDelayed(new Runnable() {
+                            public void run() {
+                                mHandler.postDelayed(new Runnable() {
+                                    public void run() {
+                                    }
+                                }, 1000);
+                            }
+                        }, 1000);
+                    }
+                }, 1000);
+            }
+        }, 500);
 
     }
 

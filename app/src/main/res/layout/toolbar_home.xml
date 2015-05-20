@@ -7,6 +7,6 @@
     android:background="?attr/colorPrimary"
     local:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
     local:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-    android:layout_height="128dp"
+    android:layout_height="64dp"
     android:gravity="bottom" />
     <!--android:layout_height="wrap_content"-->

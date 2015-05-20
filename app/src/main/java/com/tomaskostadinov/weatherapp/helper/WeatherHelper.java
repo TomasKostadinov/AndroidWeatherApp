@@ -23,7 +23,8 @@ public class WeatherHelper {
     private Integer humidity;
     private Integer pressure;
     private Double speed;
-    Integer istat = R.drawable.ic_sunny;
+    private String formattedDater;
+    private Integer istat = R.drawable.ic_sunny;
 
 
     public void setCity(String in){
@@ -221,7 +222,7 @@ public class WeatherHelper {
         Date date = new Date(Time*1000L); // *1000 is to convert seconds to milliseconds
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss"); // the format of your date
         //sdf.setTimeZone(TimeZone.getTimeZone("GMT+2")); // give a timezone reference for formating (see comment at the bottom
-        String formattedDate = sdf.format(date);
-        return formattedDate;
+        formattedDater = sdf.format(date);
+        return formattedDater;
     }
 }
