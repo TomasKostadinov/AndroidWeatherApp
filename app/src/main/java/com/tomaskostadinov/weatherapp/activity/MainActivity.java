@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -93,6 +94,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     }
 
     public void getWeatherData(){
+        Log.i("Call", "getWeatherData() called");
         AsyncHttpClient client = new AsyncHttpClient();
         client.get("http://api.openweathermap.org/data/2.5/weather?q=" + url + ",DE&lang=de", new AsyncHttpResponseHandler() {
 
@@ -104,6 +106,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                         Snackbar.with(MainActivity.this)
                                 .text(R.string.downloading_data)
                                 .duration(Snackbar.SnackbarDuration.LENGTH_SHORT));
+                Log.i("Weather Data", "Starting JSON Download for City " + url);
             }
 
             @Override
@@ -111,10 +114,12 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 // called when response HTTP status is "200 OK"
                 String in = new String(response);
                 if(in != ""){
+                    Log.i("Weather Data", "Successfully downloaded JSON");
                     wh.ParseData(in);
                     UpdateData();
                     sv.setVisibility(View.VISIBLE);
                 } else {
+                    Log.e("Weather Data", "Weather Data is NULL");
                     sv.setVisibility(View.GONE);
                 }
             }
@@ -123,6 +128,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
             public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
                 // called when response HTTP status is "4XX" (eg. 401, 403, 404)
                 sv.setVisibility(View.GONE);
+                Log.e("Weather Data", "JSON Download for City " + url + " FAILED with Error" + errorResponse.toString());
             }
 
             @Override
@@ -133,6 +139,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     }
 
     void UpdateData(){
+        Log.d("Weather Data", "Updating Data");
         loca.setText(wh.getCity());
         temp.setText(String.format("%.1f", wh.getTemperature_max()) + "°");
         desc.setText(wh.getDescription());
@@ -143,8 +150,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         suns.setText(getResources().getString(R.string.sunset) + ": " + wh.convertTime(wh.getSunset()) + " Uhr");
         todayStat.setImageResource(wh.convertWeather(wh.getWeatherid()));
     }
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
