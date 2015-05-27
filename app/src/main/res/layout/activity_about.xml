@@ -45,13 +45,13 @@
         android:textSize="14dp"
         android:layout_marginTop="10dp"
         android:gravity="center_horizontal"
-        android:text="Version: 0.9.2 \n Copyright © 2015 Tomas Kostadinov \n Contact: tomas.kostadinov@gmx.de"
+        android:text="Version: 0.9.4.1 \n Copyright © 2015 Tomas Kostadinov \n Contact: tomas.kostadinov@gmx.de"
         android:id="@+id/textView" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Software Lizenzen"
+        android:text="@string/license"
         android:id="@+id/button"
         android:textColor="@color/abc_primary_text_material_dark"
         android:background="@color/colorAccent"

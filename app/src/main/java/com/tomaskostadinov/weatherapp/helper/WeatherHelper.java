@@ -15,15 +15,9 @@ public class WeatherHelper {
 
     private Double kelvin = 272.15;
     private String city = "lol";
-    private String description;
-    private Integer weatherid;
-    private Integer sunrise;
-    private Integer sunset;
-    private Double temperature_max;
-    private Integer humidity;
-    private Integer pressure;
-    private Double speed;
-    private String formattedDater;
+    private String description, formattedDater;
+    private Integer weatherid,sunrise, sunset, humidity, pressure;
+    private Double temperature_max, speed;
     private Integer istat = R.drawable.ic_sunny;
 
 
@@ -70,7 +64,7 @@ public class WeatherHelper {
         return description;
     }
 
-    public Integer getWeatherid(){
+    public Integer getWeatherId(){
         return weatherid;
     }
 

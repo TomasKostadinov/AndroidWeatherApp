@@ -272,6 +272,11 @@
                 android:gravity="center_horizontal"
                 android:text="@string/unknown_error" />
 
+            <Spinner
+                android:id="@+id/loading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
         </RelativeLayout>
         <ProgressBar
             style="?android:attr/progressBarStyleLarge"

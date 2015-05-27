@@ -1,16 +1,18 @@
 package com.tomaskostadinov.weatherapp.activity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -19,13 +21,16 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.nispok.snackbar.Snackbar;
 import com.nispok.snackbar.SnackbarManager;
+
 import com.tomaskostadinov.weatherapp.R;
 import com.tomaskostadinov.weatherapp.helper.ServiceHandler;
 import com.tomaskostadinov.weatherapp.helper.WeatherHelper;
+import com.tomaskostadinov.weatherapp.helper.NotificationHelper;
 
 import org.apache.http.Header;
 
 import android.os.Handler;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity implements FragmentDrawer.FragmentDrawerListener {
 
@@ -38,22 +43,31 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     Integer stat = 0;
     ImageView todayStat;
     ScrollView sv;
-    String url = "";
-    WeatherHelper wh;
+    String city = "Berlin";
+    String countrycode = "DE";
     private Handler mHandler = new Handler();
+
+    public Integer b = 0;
+    NotificationHelper nh;
+    WeatherHelper wh;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        SharedPreferences prefs = this.getSharedPreferences("Location", Context.MODE_PRIVATE);
-        url = prefs.getString("location", null);
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        //String city = settings.getString("city", null);
+        //SharedPreferences prefs = this.getSharedPreferences("Location", Context.MODE_PRIVATE);
+        city = prefs.getString("location", "Berlin");
+        countrycode = prefs.getString("countrykey", "DE");
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
-        mToolbar.setSubtitle(url);
-        mToolbar.setBackgroundDrawable(getResources().getDrawable(R.drawable.header_bg));
+        mToolbar.setSubtitle(city);
+        //mToolbar.setBackgroundDrawable(getResources().getDrawable(R.drawable.header_bg));
         //mToolbar.setLogo(R.mipmap.ic_launcher);
         //getSupportActionBar().setDisplayShowHomeEnabled(true);
+
         drawerFragment = (FragmentDrawer)
                 getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
         drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar);
@@ -73,30 +87,20 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         sv = (ScrollView) findViewById(R.id.scroll_view);
         getWeatherData();
         sv.setVisibility(View.GONE);
+        nh = new NotificationHelper();
         wh = new WeatherHelper();
-        mHandler.postDelayed(new Runnable() {
-            public void run() {
-                mHandler.postDelayed(new Runnable() {
-                    public void run() {
-                        mHandler.postDelayed(new Runnable() {
-                            public void run() {
-                                mHandler.postDelayed(new Runnable() {
-                                    public void run() {
-                                    }
-                                }, 1000);
-                            }
-                        }, 1000);
-                    }
-                }, 1000);
-            }
-        }, 500);
 
     }
 
     public void getWeatherData(){
-        Log.i("Call", "getWeatherData() called");
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        //String city = settings.getString("city", null);
+        //SharedPreferences prefs = this.getSharedPreferences("Location", Context.MODE_PRIVATE);
+        city = prefs.getString("location", "Berlin");
+        countrycode = prefs.getString("countrykey", "DE");
+        mToolbar.setSubtitle(city);
         AsyncHttpClient client = new AsyncHttpClient();
-        client.get("http://api.openweathermap.org/data/2.5/weather?q=" + url + ",DE&lang=de", new AsyncHttpResponseHandler() {
+        client.get("http://api.openweathermap.org/data/2.5/weather?q=" + city + "," + countrycode + "&lang=de", new AsyncHttpResponseHandler() {
 
             @Override
             public void onStart() {
@@ -106,7 +110,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                         Snackbar.with(MainActivity.this)
                                 .text(R.string.downloading_data)
                                 .duration(Snackbar.SnackbarDuration.LENGTH_SHORT));
-                Log.i("Weather Data", "Starting JSON Download for City " + url);
             }
 
             @Override
@@ -114,12 +117,10 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 // called when response HTTP status is "200 OK"
                 String in = new String(response);
                 if(in != ""){
-                    Log.i("Weather Data", "Successfully downloaded JSON");
                     wh.ParseData(in);
                     UpdateData();
                     sv.setVisibility(View.VISIBLE);
                 } else {
-                    Log.e("Weather Data", "Weather Data is NULL");
                     sv.setVisibility(View.GONE);
                 }
             }
@@ -128,7 +129,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
             public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
                 // called when response HTTP status is "4XX" (eg. 401, 403, 404)
                 sv.setVisibility(View.GONE);
-                Log.e("Weather Data", "JSON Download for City " + url + " FAILED with Error" + errorResponse.toString());
             }
 
             @Override
@@ -139,7 +139,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     }
 
     void UpdateData(){
-        Log.d("Weather Data", "Updating Data");
         loca.setText(wh.getCity());
         temp.setText(String.format("%.1f", wh.getTemperature_max()) + "°");
         desc.setText(wh.getDescription());
@@ -148,7 +147,23 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         press.setText(getResources().getString(R.string.pressure) + ": " + wh.getPressure().toString() + " hPa");
         sunr.setText(getResources().getString(R.string.sunrise) + ": " + wh.convertTime(wh.getSunrise()) + " Uhr");
         suns.setText(getResources().getString(R.string.sunset) + ": " + wh.convertTime(wh.getSunset()) + " Uhr");
-        todayStat.setImageResource(wh.convertWeather(wh.getWeatherid()));
+        todayStat.setImageResource(wh.convertWeather(wh.getWeatherId()));
+        sendNotification();
+    }
+
+    void sendNotification(){
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        if(prefs.getBoolean("notifications", true)){
+        nh.Notificate(
+                this,
+                "Wetter in " + city + ", " + countrycode,
+                wh.getDescription(),
+                "Wettervorhersage",
+                wh.convertWeather(wh.getWeatherId()),
+                R.mipmap.ic_launcher);
+        } else {
+            //notin!
+        }
     }
 
     @Override
@@ -213,4 +228,20 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         }
 
     }
+    @Override
+    public void onBackPressed(){
+        b = b + 1;
+        if(b == 2){
+            finish();
+        }   else if(b == 1){
+            Toast.makeText(getBaseContext(), getResources().getString(R.string.back), Toast.LENGTH_LONG).show();
+        }
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                b = 0;
+            }
+        }, 2000);
+    }
+
 }

@@ -26,4 +26,19 @@
     <string name="title_help_and_support">Hilfe &amp; Support</string>
     <string name="title_settings">Einstellungen</string>
     <string name="nav_item_help_and_support">Hilfe &amp; Support</string>
+    <string name="city">Stadt</string>
+    <string name="country">Land</string>
+    <string name="helpdev">Bei der Entwicklung helfen</string>
+    <string name="main">Allgemein</string>
+    <string name="notification">Benachrichtigungen</string>
+    <string name="nsummary1">Aktuelles Wetter als Benachrichtigung zeigen</string>
+    <string name="nsummary2">Aktuelles Wetter auf Android Wear senden</string>
+    <string name="stat">Anonyme Nutzungsstatistiken</string>
+    <string name="statsummary">Absturtzberichte und Nutzungsaktivität an den Entwickler senden</string>
+    <string name="translate">App Übersetzen</string>
+    <string name="translatesummary">Helfen Sie bei der Übersetzung der App</string>
+    <string name="unit">Einheiten</string>
+    <string name="updaterate">Aktualisierungszyklus</string>
+    <string name="wearnotification">Andoid Wear</string>
+    <string name="back">Zum Beenden erneut drücken</string>
 </resources>

@@ -1,2 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+    <PreferenceCategory
+        android:title="@string/main">
+        <EditTextPreference
+            android:key="location"
+            android:title="Ort"
+            android:inputType="text"
+            />
+
+        <ListPreference
+            android:entries="@array/country"
+            android:entryValues="@array/countryCodes"
+            android:key="countrykey"
+            android:defaultValue="DE"
+            android:title="Land"
+            android:summary=""
+            />
+
+        <ListPreference
+            android:entries="@array/unitNames"
+            android:entryValues="@array/unit"
+            android:key="unit"
+            android:defaultValue="1"
+            android:title="@string/unit"
+            android:summary=""
+            />
+
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:title="@string/notification">
+
+        <CheckBoxPreference
+            android:title="@string/notification"
+            android:summary="@string/nsummary1"
+            android:key="notifications"
+            android:defaultValue="true"
+            />
+
+        <CheckBoxPreference
+            android:title="@string/wearnotification"
+            android:summary="@string/nsummary2"
+            android:key="wearnotifications"
+            android:defaultValue="true"
+            />
+
+        <ListPreference
+            android:entries="@array/updaterate"
+            android:entryValues="@array/updateRateValues"
+            android:key="updaterate"
+            android:defaultValue="3"
+            android:title="@string/updaterate"
+            android:summary="3"
+            />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:title="@string/app">
+        <Preference
+            android:title="@string/about">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:targetPackage="com.tomaskostadinov.weatherapp"
+                android:targetClass="com.tomaskostadinov.weatherapp.activity.AboutActivity"
+                />
+        </Preference>
+        <Preference
+            android:title="@string/title_help_and_support">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:targetPackage="com.tomaskostadinov.weatherapp"
+                android:targetClass="com.tomaskostadinov.weatherapp.activity.AboutActivity"
+                />
+        </Preference>
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:title="@string/helpdev">
+        <CheckBoxPreference
+            android:title="@string/stat"
+            android:summary="@string/statsummary"
+            android:key="anonymousdata"
+            android:defaultValue="true"
+            />
+
+        <Preference
+            android:title="@string/translate"
+            android:summary="@string/translatesummary">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:targetPackage="com.tomaskostadinov.weatherapp"
+                android:targetClass="com.tomaskostadinov.weatherapp.activity.AboutActivity"
+                />
+        </Preference>
+    </PreferenceCategory>
+</PreferenceScreen> 
+
