@@ -47,17 +47,30 @@
             android:defaultValue="true"
             />
 
+        <CheckBoxPreference
+            android:title="@string/wearnotification"
+            android:summary="@string/nsummary2"
+            android:key="wearnotifications"
+            android:defaultValue="true"
+            />
+
+        <ListPreference
+            android:entries="@array/updaterate"
+            android:entryValues="@array/updateRateValues"
+            android:key="updaterate"
+            android:defaultValue="3"
+            android:title="@string/updaterate"
+            android:summary="3"
+            />
     </PreferenceCategory>
     <PreferenceCategory
-        android:title="Beta">
-        <Preference
-            android:title="Experimentelle Einstellungen">
-            <intent
-                android:action="android.intent.action.VIEW"
-                android:targetPackage="com.tomaskostadinov.weatherapp"
-                android:targetClass="com.tomaskostadinov.weatherapp.activity.BetaSettingsActivity"
-                />
-        </Preference>
+        android:title="@string/extendet_settings">
+        <CheckBoxPreference
+            android:title="@string/doubleback"
+            android:summary="@string/doublebacksumm"
+            android:key="doubleback"
+            android:defaultValue="true"
+            />
     </PreferenceCategory>
     <PreferenceCategory
         android:title="@string/app">

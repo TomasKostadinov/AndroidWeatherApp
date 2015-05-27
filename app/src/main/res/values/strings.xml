@@ -507,6 +507,60 @@
     <string name="ZM" translatable="false">Zambia</string>
     <string name="ZW" translatable="false">Zimbabwe</string>
 
+    <!--languages -->
+    
+    <string name="bg" translatable="false">Bulgarian</string>
+    <string name="ca" translatable="false">Catalan</string>
+    <string name="zh_cn" translatable="false">Chinese Simplified</string>
+    <string name="zh_tw" translatable="false">Chinese Traditional</string>
+    <string name="hr" translatable="false">Croatian</string>
+    <string name="nl" translatable="false">Dutch</string>
+    <string name="en" translatable="false">English</string>
+    <string name="fi" translatable="false">Finish</string>
+    <string name="fr" translatable="false">French</string>
+    <string name="de" translatable="false">German</string>
+    <string name="it" translatable="false">Italian</string>
+    <string name="pt" translatable="false">Portuguese</string>
+    <string name="pl" translatable="false">Polish</string>
+    <string name="ro" translatable="false">Romanian</string>
+    <string name="ru" translatable="false">Russian</string>
+    <string name="es" translatable="false">Spanish</string>
+    <string name="sv" translatable="false">Swedish</string>
+    <string name="tr" translatable="false">Turkish</string>
+    <string name="ua" translatable="false">Ukrainian</string>
+
+    <string name="lbg" translatable="false">bg</string>
+    <string name="lca" translatable="false">ca</string>
+    <string name="lzh_cn" translatable="false">zh_cn</string>
+    <string name="lzh_tw" translatable="false">zh_tw</string>
+    <string name="lhr" translatable="false">hr</string>
+    <string name="lnl" translatable="false">nl</string>
+    <string name="len" translatable="false">en</string>
+    <string name="lfi" translatable="false">fi</string>
+    <string name="lfr" translatable="false">fr</string>
+    <string name="lde" translatable="false">de</string>
+    <string name="lit" translatable="false">it</string>
+    <string name="lpt" translatable="false">pt</string>
+    <string name="lpl" translatable="false">pl</string>
+    <string name="lro" translatable="false">ro</string>
+    <string name="lru" translatable="false">ru</string>
+    <string name="les" translatable="false">es</string>
+    <string name="lsv" translatable="false">sv</string>
+    <string name="ltr" translatable="false">tr</string>
+    <string name="lua" translatable="false">ua</string>
+
+    <string name="metric" translatable="false">metric</string>
+    <string name="imperial" translatable="false">imperial</string>
+    <string name="kmh" translatable="false">km/h, °C</string>
+    <string name="mph" translatable="false">mph, °F</string>
+
+
+    <string name="v0" translatable="false">0</string>
+    <string name="v3" translatable="false">3</string>
+    <string name="v6" translatable="false">6</string>
+    <string name="v12" translatable="false">12</string>
+    <string name="v24" translatable="false">24</string>
+
     <string name="city">City</string>
     <string name="country">Country</string>
     <string name="unit">Units</string>
@@ -522,7 +576,14 @@
     <string name="helpdev">Help us</string>
     <string name="main">Main</string>
     <string name="statsummary">Send anonymous usage statistics to the devloper</string>
-    <string name="license">Software Lizenzen</string>
     <string name="back">Press back again to leave</string>
+    <string name="extendet_settings">More settings</string>
+    <string name="doublebacksumm">Exit app only on double back</string>
+    <string name="doubleback">Double Back</string>
+    <string name="language">Language</string>
+    <string name="license">Open Source Licenses</string>
+    <string name="backgroundprocess">Backgroundprocesses</string>
+    <string name="backgroundprocesssumm">Sync Data in Background</string>
+    <string name="beta_settings">Beta Settings</string>
 
 </resources>

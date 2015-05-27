@@ -478,14 +478,58 @@
         <item>@string/kZW</item>
     </string-array>
 
-    <string-array name="unitNames">
-        <item>km/h, °C</item>
-        <item>mph, °F</item>
+    <string-array name="languages">
+        <item>@string/bg</item>
+        <item>@string/ca</item>
+        <item>@string/zh_cn</item>
+        <item>@string/zh_tw</item>
+        <item>@string/hr</item>
+        <item>@string/nl</item>
+        <item>@string/en</item>
+        <item>@string/fi</item>
+        <item>@string/fr</item>
+        <item>@string/de</item>
+        <item>@string/it</item>
+        <item>@string/pt</item>
+        <item>@string/pl</item>
+        <item>@string/ro</item>
+        <item>@string/ru</item>
+        <item>@string/es</item>
+        <item>@string/sv</item>
+        <item>@string/tr</item>
+        <item>@string/ua</item>
     </string-array>
 
-    <string-array name="unit">
-        <item>1</item>
-        <item>2</item>
+    <string-array name="languagecodes">
+        <item>@string/lbg</item>
+        <item>@string/lca</item>
+        <item>@string/lzh_cn</item>
+        <item>@string/lzh_tw</item>
+        <item>@string/lhr</item>
+        <item>@string/lnl</item>
+        <item>@string/len</item>
+        <item>@string/lfi</item>
+        <item>@string/lfr</item>
+        <item>@string/lde</item>
+        <item>@string/lit</item>
+        <item>@string/lpt</item>
+        <item>@string/lpl</item>
+        <item>@string/lro</item>
+        <item>@string/lru</item>
+        <item>@string/les</item>
+        <item>@string/lsv</item>
+        <item>@string/ltr</item>
+        <item>@string/lua</item>
+    </string-array>
+
+    <string-array name="unitNames">
+        <item>@string/kmh</item>
+        <item>@string/mph</item>
+    </string-array>
+
+    <string-array name="unitcode">
+        <item>@string/metric</item>
+        <item>@string/imperial</item>
     </string-array>
 
     <string-array name="updaterate">
@@ -497,10 +541,10 @@
     </string-array>
 
     <string-array name="updateRateValues">
-        <item>0</item>
-        <item>3</item>
-        <item>6</item>
-        <item>12</item>
-        <item>24</item>
+        <item>@string/v0</item>
+        <item>@string/v3</item>
+        <item>@string/v6</item>
+        <item>@string/v12</item>
+        <item>@string/v24</item>
     </string-array>
 </resources>

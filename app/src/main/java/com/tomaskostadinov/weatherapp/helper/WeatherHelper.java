@@ -1,5 +1,6 @@
 package com.tomaskostadinov.weatherapp.helper;
 
+
 import com.tomaskostadinov.weatherapp.R;
 
 import org.json.JSONArray;
@@ -12,6 +13,8 @@ import java.util.Date;
  * Created by Tomas on 17.05.2015.
  */
 public class WeatherHelper {
+
+    private NotificationHelper nh;
 
     private Double kelvin = 272.15;
     private String city = "lol";
@@ -116,7 +119,7 @@ public class WeatherHelper {
             JSONObject wind  = reader.getJSONObject("wind");
             setSpeed(wind.getDouble("speed"));
             //temperature_min =  Math.round(temperature_min) - kelvin;
-            setTemperature_max(temperature_max - kelvin);
+            setTemperature_max(temperature_max);// - kelvin);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -219,4 +222,5 @@ public class WeatherHelper {
         formattedDater = sdf.format(date);
         return formattedDater;
     }
+
 }

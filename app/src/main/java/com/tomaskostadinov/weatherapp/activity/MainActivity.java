@@ -1,8 +1,11 @@
 package com.tomaskostadinov.weatherapp.activity;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Build;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.widget.DrawerLayout;
@@ -11,9 +14,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -32,6 +34,8 @@ import org.apache.http.Header;
 import android.os.Handler;
 import android.widget.Toast;
 
+import java.util.Calendar;
+
 public class MainActivity extends AppCompatActivity implements FragmentDrawer.FragmentDrawerListener {
 
     private static String TAG = MainActivity.class.getSimpleName();
@@ -43,8 +47,11 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     Integer stat = 0;
     ImageView todayStat;
     ScrollView sv;
+    RelativeLayout ErrorLayout, LoadingLayout;
     String city = "Berlin";
     String countrycode = "DE";
+    String units = "metric";
+    String unit;
     private Handler mHandler = new Handler();
 
     public Integer b = 0;
@@ -75,6 +82,17 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         // display the first navigation drawer view on app launch
         displayView(0);
 
+        /**
+         * Helper Classes
+         */
+
+        nh = new NotificationHelper();
+        wh = new WeatherHelper();
+
+        /**
+         * Views
+         */
+
         temp = (TextView)findViewById(R.id.t);
         loca = (TextView)findViewById(R.id.l);
         windspeed = (TextView)findViewById(R.id.windspeed);
@@ -84,12 +102,37 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         suns = (TextView)findViewById(R.id.sunset);
         desc = (TextView)findViewById(R.id.desc);
         todayStat = (ImageView) findViewById(R.id.stattoday);
-        sv = (ScrollView) findViewById(R.id.scroll_view);
-        getWeatherData();
-        sv.setVisibility(View.GONE);
-        nh = new NotificationHelper();
-        wh = new WeatherHelper();
 
+        /**
+         * Layouts
+         */
+
+        ErrorLayout = (RelativeLayout) findViewById(R.id.error);
+        LoadingLayout = (RelativeLayout) findViewById(R.id.loading);
+        sv = (ScrollView) findViewById(R.id.scroll_view);
+
+        /**
+         * Setting ScrollView's & ErrorLayout's visibility to gone -> displaying the LoadingLayout
+         */
+
+        sv.setVisibility(View.GONE);
+        ErrorLayout.setVisibility(View.GONE);
+
+        /**
+         * Starting the Download
+         */
+
+        getWeatherData();
+        Calendar cal = Calendar.getInstance();
+
+        if(prefs.getBoolean("bgprocess", false)) {
+            Intent intent = new Intent(this, WeatherService.class);
+            PendingIntent pintent = PendingIntent.getService(this, 0, intent, 0);
+
+            AlarmManager alarm = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+            // schedule for every 30 seconds
+            alarm.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), 30 * 1000, pintent);
+        }
     }
 
     public void getWeatherData(){
@@ -98,14 +141,15 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         //SharedPreferences prefs = this.getSharedPreferences("Location", Context.MODE_PRIVATE);
         city = prefs.getString("location", "Berlin");
         countrycode = prefs.getString("countrykey", "DE");
+        unit = prefs.getString("unitcode", "metric");
+        String langu = prefs.getString("lang", "de");
         mToolbar.setSubtitle(city);
         AsyncHttpClient client = new AsyncHttpClient();
-        client.get("http://api.openweathermap.org/data/2.5/weather?q=" + city + "," + countrycode + "&lang=de", new AsyncHttpResponseHandler() {
+        client.get("http://api.openweathermap.org/data/2.5/weather?q=" + city + "," + countrycode + "&units=" + unit +"&lang=" + langu, new AsyncHttpResponseHandler() {
 
             @Override
             public void onStart() {
                 // called before request is started
-                //temp.setText("Loading");
                 SnackbarManager.show(
                         Snackbar.with(MainActivity.this)
                                 .text(R.string.downloading_data)
@@ -120,8 +164,11 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                     wh.ParseData(in);
                     UpdateData();
                     sv.setVisibility(View.VISIBLE);
+                    LoadingLayout.setVisibility(View.VISIBLE);
                 } else {
+                    ErrorLayout.setVisibility(View.VISIBLE);
                     sv.setVisibility(View.GONE);
+                    LoadingLayout.setVisibility(View.GONE);
                 }
             }
 
@@ -129,6 +176,8 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
             public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
                 // called when response HTTP status is "4XX" (eg. 401, 403, 404)
                 sv.setVisibility(View.GONE);
+                LoadingLayout.setVisibility(View.GONE);
+                ErrorLayout.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -156,7 +205,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         if(prefs.getBoolean("notifications", true)){
         nh.Notificate(
                 this,
-                "Wetter in " + city + ", " + countrycode,
+                String.format("%.1f", wh.getTemperature_max()) + "° in " + city + ", " + countrycode,
                 wh.getDescription(),
                 "Wettervorhersage",
                 wh.convertWeather(wh.getWeatherId()),
@@ -172,6 +221,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -216,6 +266,10 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 break;
             case 1:
                 //startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                Uri data = Uri.parse("mailto:tomas.kostadinov@gmx.de?subject=Android Weather App");
+                i.setData(data);
+                startActivity(i);
                 break;
             case 2:
                 startActivity(new Intent(getApplicationContext(), AboutActivity.class));
@@ -226,22 +280,27 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
             default:
                 break;
         }
-
     }
+
     @Override
     public void onBackPressed(){
-        b = b + 1;
-        if(b == 2){
-            finish();
-        }   else if(b == 1){
-            Toast.makeText(getBaseContext(), getResources().getString(R.string.back), Toast.LENGTH_LONG).show();
-        }
-        mHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                b = 0;
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        if(prefs.getBoolean("doubleback", true)){
+            b = b + 1;
+            if(b == 2){
+                finish();
+            }   else if(b == 1){
+                Toast.makeText(getBaseContext(), getResources().getString(R.string.back), Toast.LENGTH_LONG).show();
             }
-        }, 2000);
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    b = 0;
+                }
+            }, 2000);
+        } else {
+            finish();
+        }
     }
 
 }

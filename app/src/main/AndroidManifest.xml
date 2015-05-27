@@ -41,5 +41,16 @@
             android:configChanges="orientation"
             android:screenOrientation="portrait" >
         </activity>
-</application>
+        <activity
+            android:name=".activity.BetaSettingsActivity"
+            android:label="@string/beta_settings"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" >
+        </activity>
+        <service
+            android:name=".activity.WeatherService"
+            android:icon="@mipmap/ic_launcher"
+            android:label="Weather Sync Service">
+        </service>
+    </application>
 </manifest>
