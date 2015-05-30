@@ -22,7 +22,25 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>MainActivity
+            <intent-filter>
+                <data android:scheme="weather" />
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:host="www.wetter.com" android:scheme="http" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:host="wetter.com" android:scheme="http" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".activity.AboutActivity"
             android:label="@string/about"
@@ -33,7 +51,8 @@
             android:name=".activity.LicenseActivity"
             android:label="@string/license"
             android:configChanges="orientation"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:parentActivityName=".activity.AboutActivity">
         </activity>
         <activity
             android:name=".activity.SettingsActivity"

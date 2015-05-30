@@ -4,6 +4,7 @@ import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
@@ -32,53 +33,6 @@ import com.tomaskostadinov.weatherapp.R;
 /**
  * Created by Tomas on 13.05.2015.
  */
-/*
-public class SettingsActivity extends AppCompatActivity {
-
-    private Toolbar mToolbar;
-    EditText et;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_settings);
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(mToolbar);
-        mToolbar.setNavigationIcon(R.drawable.abc_ic_ab_back_mtrl_am_alpha);
-        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
-        Button clickButton = (Button) findViewById(R.id.button);
-        et   = (EditText)findViewById(R.id.editText);
-        clickButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SharedPreferences pref = getApplicationContext().getSharedPreferences("Location", MODE_PRIVATE);
-                SharedPreferences.Editor editor = pref.edit();
-                //editor.putBoolean("key_name1", true);           // Saving boolean - true/false
-                //editor.putInt("key_name2", "int value");        // Saving integer
-                //editor.putFloat("key_name3", "float value");    // Saving float
-                //editor.putLong("key_name4", "long value");      // Saving long
-                editor.putString("location",  et.getText().toString());  // Saving string
-                editor.apply(); // commit changes
-                Log.d("Weather Location", "Saving Location \"" + et.getText().toString() +"\" to SharedPreferences");
-                startActivity(new Intent(getApplicationContext(), MainActivity.class));
-            }
-        });
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_cancel, menu);
-        return true;
-    }
-
-}*/
-
 public class SettingsActivity extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     @Override
@@ -98,6 +52,26 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
             @Override
             public void onClick(View v) {
                 finish();
+            }
+        });
+        final Preference prefTranslation = (Preference) findPreference("translation");
+        prefTranslation.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            public boolean onPreferenceClick(Preference pref) {
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                Uri data = Uri.parse("mailto:tomas.kostadinov@gmx.de?subject=I want to help translating your app!");
+                i.setData(data);
+                startActivity(i);
+                return true;
+            }
+        });
+        final Preference prefHelp = (Preference) findPreference("help");
+        prefHelp.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            public boolean onPreferenceClick(Preference pref) {
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                Uri data = Uri.parse("mailto:tomas.kostadinov@gmx.de?subject=I need help with your app!");
+                i.setData(data);
+                startActivity(i);
+                return true;
             }
         });
     }

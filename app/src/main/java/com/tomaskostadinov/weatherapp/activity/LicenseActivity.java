@@ -35,7 +35,6 @@ public class LicenseActivity extends ActionBarActivity{
                 onBackPressed();
             }
         });
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
         WebView wv = (WebView)this.findViewById(R.id.webView);
         wv.setWebViewClient(new WebViewClient() {
             @Override

@@ -25,9 +25,8 @@ import com.nispok.snackbar.Snackbar;
 import com.nispok.snackbar.SnackbarManager;
 
 import com.tomaskostadinov.weatherapp.R;
-import com.tomaskostadinov.weatherapp.helper.ServiceHandler;
-import com.tomaskostadinov.weatherapp.helper.WeatherHelper;
 import com.tomaskostadinov.weatherapp.helper.NotificationHelper;
+import com.tomaskostadinov.weatherapp.helper.WeatherHelper;
 
 import org.apache.http.Header;
 
@@ -38,40 +37,33 @@ import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity implements FragmentDrawer.FragmentDrawerListener {
 
-    private static String TAG = MainActivity.class.getSimpleName();
 
     private Toolbar mToolbar;
-    private FragmentDrawer drawerFragment;
-    private ServiceHandler obj;
-    TextView temp, loca, windspeed, press, hum, suns, sunr, desc;
-    Integer stat = 0;
+    FragmentDrawer drawerFragment;
+    //private ServiceHandler obj;
+    TextView temp, loc, windspeed, press, hum, suns, sunr, desc;
     ImageView todayStat;
     ScrollView sv;
     RelativeLayout ErrorLayout, LoadingLayout;
-    String city = "Berlin";
-    String countrycode = "DE";
-    String units = "metric";
-    String unit;
+    String city, CountryCode, language, unit;
+
     private Handler mHandler = new Handler();
+    public  SharedPreferences prefs;
 
     public Integer b = 0;
-    NotificationHelper nh;
-    WeatherHelper wh;
+    NotificationHelper NotificationHelper;
+    WeatherHelper WeatherHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        //String city = settings.getString("city", null);
-        //SharedPreferences prefs = this.getSharedPreferences("Location", Context.MODE_PRIVATE);
         city = prefs.getString("location", "Berlin");
-        countrycode = prefs.getString("countrykey", "DE");
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         mToolbar.setSubtitle(city);
-        //mToolbar.setBackgroundDrawable(getResources().getDrawable(R.drawable.header_bg));
         //mToolbar.setLogo(R.mipmap.ic_launcher);
         //getSupportActionBar().setDisplayShowHomeEnabled(true);
 
@@ -83,25 +75,11 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         displayView(0);
 
         /**
-         * Helper Classes
+         * Helper classes
          */
 
-        nh = new NotificationHelper();
-        wh = new WeatherHelper();
-
-        /**
-         * Views
-         */
-
-        temp = (TextView)findViewById(R.id.t);
-        loca = (TextView)findViewById(R.id.l);
-        windspeed = (TextView)findViewById(R.id.windspeed);
-        press = (TextView)findViewById(R.id.pressure);
-        hum = (TextView)findViewById(R.id.humidity);
-        sunr = (TextView)findViewById(R.id.sunrise);
-        suns = (TextView)findViewById(R.id.sunset);
-        desc = (TextView)findViewById(R.id.desc);
-        todayStat = (ImageView) findViewById(R.id.stattoday);
+        NotificationHelper = new NotificationHelper();
+        WeatherHelper = new WeatherHelper();
 
         /**
          * Layouts
@@ -112,6 +90,20 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         sv = (ScrollView) findViewById(R.id.scroll_view);
 
         /**
+         * Views
+         */
+
+        temp = (TextView)findViewById(R.id.t);
+        loc = (TextView)findViewById(R.id.l);
+        windspeed = (TextView)findViewById(R.id.windspeed);
+        press = (TextView)findViewById(R.id.pressure);
+        hum = (TextView)findViewById(R.id.humidity);
+        sunr = (TextView)findViewById(R.id.sunrise);
+        suns = (TextView)findViewById(R.id.sunset);
+        desc = (TextView)findViewById(R.id.desc);
+        todayStat = (ImageView) findViewById(R.id.stattoday);
+
+        /**
          * Setting ScrollView's & ErrorLayout's visibility to gone -> displaying the LoadingLayout
          */
 
@@ -119,37 +111,48 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         ErrorLayout.setVisibility(View.GONE);
 
         /**
-         * Starting the Download
+         * Starting
          */
 
         getWeatherData();
-        Calendar cal = Calendar.getInstance();
 
+        /**
+         * [BETA] Starting, if activated, WeatherService to sync the weather data in Background
+         * Current Status: Download fails
+         * TODO fix problems
+         */
         if(prefs.getBoolean("bgprocess", false)) {
             Intent intent = new Intent(this, WeatherService.class);
-            PendingIntent pintent = PendingIntent.getService(this, 0, intent, 0);
-
+            PendingIntent PI = PendingIntent.getService(this, 0, intent, 0);
             AlarmManager alarm = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
             // schedule for every 30 seconds
-            alarm.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), 30 * 1000, pintent);
+            Calendar cal = Calendar.getInstance();
+            alarm.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), 30 * 60 * 1000, PI);
         }
     }
 
+
     public void getWeatherData(){
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        //String city = settings.getString("city", null);
-        //SharedPreferences prefs = this.getSharedPreferences("Location", Context.MODE_PRIVATE);
+        /**
+         * Get settings
+         */
         city = prefs.getString("location", "Berlin");
-        countrycode = prefs.getString("countrykey", "DE");
+        CountryCode = prefs.getString("countrykey", "DE");
         unit = prefs.getString("unitcode", "metric");
-        String langu = prefs.getString("lang", "de");
+        language = prefs.getString("lang", "de");
         mToolbar.setSubtitle(city);
+        /**
+         * Start JSON data download
+         */
         AsyncHttpClient client = new AsyncHttpClient();
-        client.get("http://api.openweathermap.org/data/2.5/weather?q=" + city + "," + countrycode + "&units=" + unit +"&lang=" + langu, new AsyncHttpResponseHandler() {
+        client.get("http://api.openweathermap.org/data/2.5/weather?q=" + city + "," + CountryCode + "&units=" + unit +"&lang=" + language, new AsyncHttpResponseHandler() {
 
             @Override
             public void onStart() {
                 // called before request is started
+                /**
+                 * Only for testing
+                 */
                 SnackbarManager.show(
                         Snackbar.with(MainActivity.this)
                                 .text(R.string.downloading_data)
@@ -161,7 +164,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 // called when response HTTP status is "200 OK"
                 String in = new String(response);
                 if(in != ""){
-                    wh.ParseData(in);
+                    WeatherHelper.ParseData(in);
                     UpdateData();
                     sv.setVisibility(View.VISIBLE);
                     LoadingLayout.setVisibility(View.VISIBLE);
@@ -169,15 +172,21 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                     ErrorLayout.setVisibility(View.VISIBLE);
                     sv.setVisibility(View.GONE);
                     LoadingLayout.setVisibility(View.GONE);
+                    getCachedData();
                 }
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
-                // called when response HTTP status is "4XX" (eg. 401, 403, 404)
+                /**
+                 * Called when response HTTP status is "4XX" (eg. 401, 403, 404)
+                 * Setting ScrollView's & LoadingLayout's visibility to gone -> displaying the ErrorLayout
+                 * TODO Find a better solution for this
+                 */
                 sv.setVisibility(View.GONE);
                 LoadingLayout.setVisibility(View.GONE);
                 ErrorLayout.setVisibility(View.VISIBLE);
+                getCachedData();
             }
 
             @Override
@@ -187,31 +196,50 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         });
     }
 
-    void UpdateData(){
-        loca.setText(wh.getCity());
-        temp.setText(String.format("%.1f", wh.getTemperature_max()) + "°");
-        desc.setText(wh.getDescription());
-        windspeed.setText(getResources().getString(R.string.windspeed) + ": " + wh.getSpeed().toString() + " km/h");
-        hum.setText(getResources().getString(R.string.humidity) + ": " + wh.getHumidity().toString() + "%");
-        press.setText(getResources().getString(R.string.pressure) + ": " + wh.getPressure().toString() + " hPa");
-        sunr.setText(getResources().getString(R.string.sunrise) + ": " + wh.convertTime(wh.getSunrise()) + " Uhr");
-        suns.setText(getResources().getString(R.string.sunset) + ": " + wh.convertTime(wh.getSunset()) + " Uhr");
-        todayStat.setImageResource(wh.convertWeather(wh.getWeatherId()));
+    public void UpdateData(){
+        /**
+         * Writing data to TextView
+         */
+        loc.setText(WeatherHelper.getCity());
+        temp.setText(String.format("%.1f", WeatherHelper.getTemperature_max()) + "°");
+        desc.setText(WeatherHelper.getDescription());
+        windspeed.setText(getResources().getString(R.string.windspeed) + ": " + WeatherHelper.getSpeed().toString() + " km/h");
+        hum.setText(getResources().getString(R.string.humidity) + ": " + WeatherHelper.getHumidity().toString() + "%");
+        press.setText(getResources().getString(R.string.pressure) + ": " + WeatherHelper.getPressure().toString() + " hPa");
+        sunr.setText(getResources().getString(R.string.sunrise) + ": " + WeatherHelper.convertTime(WeatherHelper.getSunrise()) + " Uhr");
+        suns.setText(getResources().getString(R.string.sunset) + ": " + WeatherHelper.convertTime(WeatherHelper.getSunset()) + " Uhr");
+        /**
+         * Setting Sun/Cloud/... Image from converted weather id
+         */
+        todayStat.setImageResource(WeatherHelper.convertWeather(WeatherHelper.getWeatherId()));
         sendNotification();
     }
 
-    void sendNotification(){
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+    public void sendNotification(){
         if(prefs.getBoolean("notifications", true)){
-        nh.Notificate(
-                this,
-                String.format("%.1f", wh.getTemperature_max()) + "° in " + city + ", " + countrycode,
-                wh.getDescription(),
-                "Wettervorhersage",
-                wh.convertWeather(wh.getWeatherId()),
-                R.mipmap.ic_launcher);
-        } else {
-            //notin!
+            /**
+             * Setting up Notification
+             */
+            NotificationHelper.setCtxt(this);
+            NotificationHelper.setTitl(String.format("%.1f", WeatherHelper.getTemperature_max()) + "° in " + city + ", " + CountryCode);
+            NotificationHelper.setDesc(WeatherHelper.getDescription());
+            NotificationHelper.setTicker("Wettervorhersage");
+            NotificationHelper.setLaIc(WeatherHelper.convertWeather(WeatherHelper.getWeatherId()));
+            NotificationHelper.setSmIc(R.mipmap.ic_launcher);
+            NotificationHelper.setCtxt(this);
+            NotificationHelper.fire();
+        }
+    }
+
+    public void getCachedData(){
+        if (prefs.getBoolean("cache", false)){
+            /**
+             * Getting cached Data
+             */
+            if (prefs.getString("cached", "") != ""){
+                WeatherHelper.ParseData(prefs.getString("cached", ""));
+                UpdateData();
+            }
         }
     }
 
@@ -229,7 +257,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
             return true;
@@ -246,7 +273,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         }
 
         if(id == R.id.action_refresh){
-            //open();
             getWeatherData();
             return true;
         }
@@ -265,7 +291,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 //startActivity(new Intent(getApplicationContext(), MainActivity.class));
                 break;
             case 1:
-                //startActivity(new Intent(getApplicationContext(), MainActivity.class));
                 Intent i = new Intent(Intent.ACTION_VIEW);
                 Uri data = Uri.parse("mailto:tomas.kostadinov@gmx.de?subject=Android Weather App");
                 i.setData(data);
@@ -284,7 +309,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
     @Override
     public void onBackPressed(){
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         if(prefs.getBoolean("doubleback", true)){
             b = b + 1;
             if(b == 2){

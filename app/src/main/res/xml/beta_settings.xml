@@ -25,9 +25,26 @@
             android:title="@string/updaterate"
             android:summary="3"
             />
+
     </PreferenceCategory>
     <PreferenceCategory
-        android:title="@string/extendet_settings">
+        android:title="@string/cache">
+        <CheckBoxPreference
+            android:enabled="false"
+            android:title="@string/cachetitle"
+            android:summary="@string/cachesumm"
+            android:key="cache"
+            android:defaultValue="false"
+            />
+        <Preference
+            android:enabled="false"
+            android:title="Clear cache"
+            android:summary="Clear Application cache"
+            android:key="cacheclear"
+            />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:title="@string/extended_settings">
         <CheckBoxPreference
             android:title="@string/doubleback"
             android:summary="@string/doublebacksumm"
@@ -35,5 +52,4 @@
             android:defaultValue="true"
             />
     </PreferenceCategory>
-</PreferenceScreen> 
-
+</PreferenceScreen>

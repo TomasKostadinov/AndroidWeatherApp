@@ -41,7 +41,7 @@
     <string name="updaterate">Aktualisierungszyklus</string>
     <string name="wearnotification">Andoid Wear</string>
     <string name="back">Zum Beenden erneut drücken</string>
-    <string name="extendet_settings">Erweiterte Einstellungen</string>
+    <string name="extended_settings">Erweiterte Einstellungen</string>
     <string name="doublebacksumm">App nur nach zweimaligen Zurück-klick schließen</string>
     <string name="doubleback">Doppel Zurück</string>
     <string name="language">Sprache</string>
@@ -49,4 +49,7 @@
     <string name="beta_settings">Beta Einstellungen</string>
     <string name="backgroundprocesssumm">Hintergundprozess zum Aktualisieren von den Wetterdaten aktivieren</string>
     <string name="backgroundprocess">Hintergrundprozesse</string>
+    <string name="cache">Cache</string>
+    <string name="cachetitle">Cache aktivieren</string>
+    <string name="cachesumm">Wetterdaten für offline Nutzung speichern</string>
 </resources>

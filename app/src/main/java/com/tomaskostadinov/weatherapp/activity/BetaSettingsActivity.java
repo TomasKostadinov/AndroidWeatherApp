@@ -1,7 +1,9 @@
 package com.tomaskostadinov.weatherapp.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
@@ -19,6 +21,7 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.tomaskostadinov.weatherapp.R;
 
@@ -46,7 +49,8 @@ public class BetaSettingsActivity extends PreferenceActivity implements SharedPr
                 finish();
             }
         });
-        bar.setTitle(getResources().getString(R.string.beta_settings));
+        bar.setTitle(getResources().getString(R.string.extended_settings));
+
     }
     @Override
     public View onCreateView(String name, Context context, AttributeSet attrs) {
@@ -74,6 +78,7 @@ public class BetaSettingsActivity extends PreferenceActivity implements SharedPr
         }
         return null;
     }
+
     @Override
     protected void onResume() {
         super.onResume();

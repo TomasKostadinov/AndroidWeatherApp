@@ -64,7 +64,7 @@
             />
     </PreferenceCategory>
     <PreferenceCategory
-        android:title="@string/extendet_settings">
+        android:title="@string/extended_settings">
         <CheckBoxPreference
             android:title="@string/doubleback"
             android:summary="@string/doublebacksumm"

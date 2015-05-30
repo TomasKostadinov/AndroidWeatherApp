@@ -577,7 +577,7 @@
     <string name="main">Main</string>
     <string name="statsummary">Send anonymous usage statistics to the devloper</string>
     <string name="back">Press back again to leave</string>
-    <string name="extendet_settings">More settings</string>
+    <string name="extended_settings">More settings</string>
     <string name="doublebacksumm">Exit app only on double back</string>
     <string name="doubleback">Double Back</string>
     <string name="language">Language</string>
@@ -585,5 +585,8 @@
     <string name="backgroundprocess">Backgroundprocesses</string>
     <string name="backgroundprocesssumm">Sync Data in Background</string>
     <string name="beta_settings">Beta Settings</string>
+    <string name="cache">Cache</string>
+    <string name="cachetitle">Activate Caching</string>
+    <string name="cachesumm">Saves downloaded data for offline usage</string>
 
 </resources>

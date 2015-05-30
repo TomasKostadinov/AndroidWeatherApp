@@ -31,13 +31,13 @@ public class WeatherService extends Service {
         //TODO do something useful
         Toast.makeText(getBaseContext(), "Loading Callback", Toast.LENGTH_LONG).show();
         getWeatherData();
-        nh.Notificate(
+        /*nh.Notificate(
                 this,
                "lol in " + city + ", " + countrycode,
                 "Xd",
                 "Wettervorhersage",
                 R.mipmap.ic_launcher,
-                R.mipmap.ic_launcher);
+                R.mipmap.ic_launcher);*/
         return Service.START_STICKY;
     }
 
@@ -85,14 +85,14 @@ public class WeatherService extends Service {
     }
 
     void noti(){
-
+        /*
         nh.Notificate(
                 this,
                 String.format("%.1f", wh.getTemperature_max()) + " in " + city + ", " + countrycode,
                 wh.getDescription(),
                 "Wettervorhersage",
                 wh.convertWeather(wh.getWeatherId()),
-                R.mipmap.ic_launcher);
+                R.mipmap.ic_launcher);*/
     }
 
 

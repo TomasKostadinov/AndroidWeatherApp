@@ -125,7 +125,6 @@ public class WeatherHelper {
         }
     }
 
-
     public Integer convertWeather(Integer ID){
         switch (ID){
             case 200:
@@ -216,9 +215,9 @@ public class WeatherHelper {
     }
 
     public String convertTime(Integer Time){
-        Date date = new Date(Time*1000L); // *1000 is to convert seconds to milliseconds
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss"); // the format of your date
-        //sdf.setTimeZone(TimeZone.getTimeZone("GMT+2")); // give a timezone reference for formating (see comment at the bottom
+        Date date = new Date(Time*1000L); // *1000 Convertiert Sekunden in Millisekunden
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss"); // Datumsformat
+        //sdf.setTimeZone(TimeZone.getTimeZone("GMT+2")); // Zeitzone
         formattedDater = sdf.format(date);
         return formattedDater;
     }
