@@ -27,5 +27,4 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/nav_header_container"
         android:layout_marginTop="0dp" />
-
 </RelativeLayout>

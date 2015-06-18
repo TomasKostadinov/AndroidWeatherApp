@@ -1,5 +1,6 @@
 package com.tomaskostadinov.weatherapp.activity;
 
+import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -8,22 +9,32 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.nispok.snackbar.Snackbar;
-import com.nispok.snackbar.SnackbarManager;
 
+import com.mikepenz.materialdrawer.Drawer;
+import com.mikepenz.materialdrawer.DrawerBuilder;
+import com.mikepenz.materialdrawer.accountswitcher.AccountHeader;
+import com.mikepenz.materialdrawer.accountswitcher.AccountHeaderBuilder;
+import com.mikepenz.materialdrawer.model.DividerDrawerItem;
+import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
+import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
+import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import com.tomaskostadinov.weatherapp.R;
 import com.tomaskostadinov.weatherapp.helper.NotificationHelper;
 import com.tomaskostadinov.weatherapp.helper.WeatherHelper;
@@ -35,16 +46,16 @@ import android.widget.Toast;
 
 import java.util.Calendar;
 
-public class MainActivity extends AppCompatActivity implements FragmentDrawer.FragmentDrawerListener {
+public class MainActivity extends AppCompatActivity{
 
 
     private Toolbar mToolbar;
-    FragmentDrawer drawerFragment;
-    //private ServiceHandler obj;
     TextView temp, loc, windspeed, press, hum, suns, sunr, desc;
     ImageView todayStat;
     ScrollView sv;
-    RelativeLayout ErrorLayout, LoadingLayout;
+    ImageButton fab; //The floating action button
+    LinearLayout ErrorLayout;
+    RelativeLayout LoadingLayout;
     String city, CountryCode, language, unit;
 
     private Handler mHandler = new Handler();
@@ -54,26 +65,29 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     NotificationHelper NotificationHelper;
     WeatherHelper WeatherHelper;
 
+    public Drawer result;
+    public Bundle extras;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
-        city = prefs.getString("location", "Berlin");
+        extras = getIntent().getExtras();
+
+        if(extras != null){
+            city = extras.getString("place");
+        } else {
+            city = prefs.getString("location", "Berlin");
+        }
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         mToolbar.setSubtitle(city);
         //mToolbar.setLogo(R.mipmap.ic_launcher);
         //getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        drawerFragment = (FragmentDrawer)
-                getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
-        drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar);
-        drawerFragment.setDrawerListener(this);
-        // display the first navigation drawer view on app launch
-        displayView(0);
-
+        startActivity(new Intent(getApplicationContext(), ForecastActivity.class));
         /**
          * Helper classes
          */
@@ -85,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
          * Layouts
          */
 
-        ErrorLayout = (RelativeLayout) findViewById(R.id.error);
+        ErrorLayout = (LinearLayout) findViewById(R.id.error);
         LoadingLayout = (RelativeLayout) findViewById(R.id.loading);
         sv = (ScrollView) findViewById(R.id.scroll_view);
 
@@ -102,11 +116,13 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         suns = (TextView)findViewById(R.id.sunset);
         desc = (TextView)findViewById(R.id.desc);
         todayStat = (ImageView) findViewById(R.id.stattoday);
+        fab = (ImageButton) findViewById(R.id.imageButton);
 
         /**
+         * Removing that ugly overscroll effect
          * Setting ScrollView's & ErrorLayout's visibility to gone -> displaying the LoadingLayout
          */
-
+        sv.setOverScrollMode(View.OVER_SCROLL_NEVER);
         sv.setVisibility(View.GONE);
         ErrorLayout.setVisibility(View.GONE);
 
@@ -129,15 +145,97 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
             Calendar cal = Calendar.getInstance();
             alarm.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), 30 * 60 * 1000, PI);
         }
+
+        /**
+         * Setting up navigation drawer header
+         * TODO FIRST, SECOND & THIRD CITY SUPPORT
+         */
+
+        AccountHeader headerResult = new AccountHeaderBuilder()
+                .withProfileImagesVisible(false)
+                .withActivity(this)
+                .withHeaderBackground(R.drawable.header)
+                .addProfiles(
+                        new ProfileDrawerItem().withEmail(prefs.getString("location", "Berlin")).withIcon(getResources().getDrawable(R.drawable.ic_cloud))
+                )
+                .withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
+                    @Override
+                    public boolean onProfileChanged(View view, IProfile profile, boolean currentProfile) {
+                        return false;
+                    }
+                })
+                .build();
+
+        //Now create your drawer and pass the AccountHeader.Result
+        result = new DrawerBuilder()
+                .withTranslucentStatusBar(true)
+
+                .withActivity(this)
+                .withToolbar(mToolbar)
+                .withAccountHeader(headerResult)
+                .addDrawerItems(
+                        new PrimaryDrawerItem().withName("Wettervorhersage").withIcon(getResources().getDrawable(R.drawable.ic_sunny)),
+                        new PrimaryDrawerItem().withName(R.string.places).withIcon(getResources().getDrawable(R.drawable.ic_place)),
+                        new DividerDrawerItem(),
+                        new SecondaryDrawerItem().withName(R.string.nav_item_help_and_support).withIcon(getResources().getDrawable(R.drawable.ic_help)),
+                        new SecondaryDrawerItem().withName(R.string.about).withIcon(getResources().getDrawable(R.mipmap.ic_launcher)),
+                        new DividerDrawerItem(),
+                        new SecondaryDrawerItem().withName(R.string.title_settings).withIcon(getResources().getDrawable(R.drawable.ic_settings))
+                ).withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
+                    @Override
+                    public boolean onItemClick(AdapterView<?> parent, View view, int position, long id, IDrawerItem drawerItem) {
+                        switch (position) {
+                            case 0:
+                                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                                return true;
+                            case 1:
+                                startActivity(new Intent(getApplicationContext(), PlaceActivity.class));
+                                result.setSelection(0);
+                                return true;
+                            case 3:
+                                result.setSelection(0);
+                                Intent i = new Intent(Intent.ACTION_VIEW);
+                                Uri data = Uri.parse("mailto:tomas.kostadinov@gmx.de?subject=Android Weather App");
+                                i.setData(data);
+                                startActivity(i);
+                                return true;
+                            case 4:
+                                startActivity(new Intent(getApplicationContext(), AboutActivity.class));
+                                result.setSelection(0);
+                                return true;
+                            case 5:
+                                startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
+                                result.setSelection(0);
+                                return true;
+                            case 6:
+                                startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
+                                result.setSelection(0);
+                                return true;
+                            default:
+                                result.closeDrawer();
+                                return true;
+                        }
+                    }
+                }).build();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        getWeatherData();
+    }
 
     public void getWeatherData(){
         /**
          * Get settings
          */
-        city = prefs.getString("location", "Berlin");
-        CountryCode = prefs.getString("countrykey", "DE");
+        if(extras != null){
+            city = extras.getString("place");
+            CountryCode = extras.getString("country");
+        } else {
+            city = prefs.getString("location", "Berlin");
+            CountryCode = prefs.getString("countrykey", "DE");
+        }
         unit = prefs.getString("unitcode", "metric");
         language = prefs.getString("lang", "de");
         mToolbar.setSubtitle(city);
@@ -153,10 +251,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 /**
                  * Only for testing
                  */
-                SnackbarManager.show(
-                        Snackbar.with(MainActivity.this)
-                                .text(R.string.downloading_data)
-                                .duration(Snackbar.SnackbarDuration.LENGTH_SHORT));
             }
 
             @Override
@@ -197,17 +291,24 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     }
 
     public void UpdateData(){
+        fab.bringToFront();
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), DesignTest.class));
+            }
+        });
         /**
          * Writing data to TextView
          */
         loc.setText(WeatherHelper.getCity());
         temp.setText(String.format("%.1f", WeatherHelper.getTemperature_max()) + "°");
         desc.setText(WeatherHelper.getDescription());
-        windspeed.setText(getResources().getString(R.string.windspeed) + ": " + WeatherHelper.getSpeed().toString() + " km/h");
-        hum.setText(getResources().getString(R.string.humidity) + ": " + WeatherHelper.getHumidity().toString() + "%");
-        press.setText(getResources().getString(R.string.pressure) + ": " + WeatherHelper.getPressure().toString() + " hPa");
-        sunr.setText(getResources().getString(R.string.sunrise) + ": " + WeatherHelper.convertTime(WeatherHelper.getSunrise()) + " Uhr");
-        suns.setText(getResources().getString(R.string.sunset) + ": " + WeatherHelper.convertTime(WeatherHelper.getSunset()) + " Uhr");
+        windspeed.setText(WeatherHelper.getSpeed().toString() + " km/h");
+        hum.setText(WeatherHelper.getHumidity().toString() + "%");
+        press.setText(WeatherHelper.getPressure().toString() + " hPa");
+        sunr.setText(WeatherHelper.convertTime(WeatherHelper.getSunrise()) + " Uhr");
+        suns.setText(WeatherHelper.convertTime(WeatherHelper.getSunset()) + " Uhr");
         /**
          * Setting Sun/Cloud/... Image from converted weather id
          */
@@ -226,7 +327,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
             NotificationHelper.setTicker("Wettervorhersage");
             NotificationHelper.setLaIc(WeatherHelper.convertWeather(WeatherHelper.getWeatherId()));
             NotificationHelper.setSmIc(R.mipmap.ic_launcher);
-            NotificationHelper.setCtxt(this);
             NotificationHelper.fire();
         }
     }
@@ -257,23 +357,17 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        if (id == R.id.action_settings) {
-            startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
-            return true;
-        }
-
-        if (id == R.id.action_about) {
-            startActivity(new Intent(getApplicationContext(), AboutActivity.class));
-            return true;
-        }
-
-        if (id == R.id.action_exit) {
-            System.exit(0);
-            return true;
-        }
-
         if(id == R.id.action_refresh){
             getWeatherData();
+            return true;
+        }
+
+        if(id == R.id.action_share){
+            String sharebody = "Wetterbericht für " + city + ", " + CountryCode + ": " + WeatherHelper.getDescription() + " bei " + String.format("%.1f", WeatherHelper.getTemperature_max()) + "°";
+            Intent sharingIntent = new Intent(Intent.ACTION_SEND);
+            sharingIntent.setType("text/plain");
+            sharingIntent.putExtra(Intent.EXTRA_TEXT, sharebody);
+            startActivity(Intent.createChooser(sharingIntent, getResources().getString(R.string.share_using)));
             return true;
         }
 
@@ -281,49 +375,27 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     }
 
     @Override
-    public void onDrawerItemSelected(View view, int position) {
-        displayView(position);
-    }
-
-    private void displayView(int position) {
-        switch (position) {
-            case 0:
-                //startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                break;
-            case 1:
-                Intent i = new Intent(Intent.ACTION_VIEW);
-                Uri data = Uri.parse("mailto:tomas.kostadinov@gmx.de?subject=Android Weather App");
-                i.setData(data);
-                startActivity(i);
-                break;
-            case 2:
-                startActivity(new Intent(getApplicationContext(), AboutActivity.class));
-                break;
-            case 3:
-                startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
-                break;
-            default:
-                break;
-        }
-    }
-
-    @Override
     public void onBackPressed(){
-        if(prefs.getBoolean("doubleback", true)){
-            b = b + 1;
-            if(b == 2){
-                finish();
-            }   else if(b == 1){
-                Toast.makeText(getBaseContext(), getResources().getString(R.string.back), Toast.LENGTH_LONG).show();
-            }
-            mHandler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    b = 0;
-                }
-            }, 2000);
+        if(result.isDrawerOpen()){
+            result.closeDrawer();
+            b = 0;
         } else {
-            finish();
+            if(prefs.getBoolean("doubleback", true)){
+                b = b + 1;
+                if(b == 2){
+                    finish();
+                }   else if(b == 1){
+                    Toast.makeText(getBaseContext(), getResources().getString(R.string.back), Toast.LENGTH_LONG).show();
+                }
+                mHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        b = 0;
+                    }
+                }, 2000);
+            } else {
+                finish();
+            }
         }
     }
 

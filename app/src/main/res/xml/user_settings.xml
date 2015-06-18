@@ -65,8 +65,8 @@
             android:title="@string/about">
             <intent
                 android:action="android.intent.action.VIEW"
-                android:targetPackage="com.tomaskostadinov.weatherapp"
-                android:targetClass="com.tomaskostadinov.weatherapp.activity.AboutActivity"
+                android:targetPackage="com.tomaskostadinov.pulse.network"
+                android:targetClass="com.tomaskostadinov.pulse.network.activity.AboutActivity"
                 />
         </Preference>
         <Preference

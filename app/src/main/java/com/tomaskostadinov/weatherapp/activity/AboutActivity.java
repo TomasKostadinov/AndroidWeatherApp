@@ -2,16 +2,18 @@ package com.tomaskostadinov.weatherapp.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.view.Menu;
 import android.view.View;
-import android.widget.Button;
+import android.widget.TextView;
 
 import com.tomaskostadinov.weatherapp.R;
 
 /**
- * Created by Tomas Kostadinov on 19.04.2015.
+ * Created by Tomas on 31.05.2015
  */
 public class AboutActivity extends AppCompatActivity {
 
@@ -21,25 +23,26 @@ public class AboutActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(mToolbar);
-        mToolbar.setNavigationIcon(R.drawable.abc_ic_ab_back_mtrl_am_alpha);
-        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+        TextView tx = (TextView) findViewById(R.id.appdesc);
+        tx.setText(Html.fromHtml(getResources().getString(R.string.versionDesc)));
+        findViewById(R.id.button_license).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onBackPressed();
+                Intent intent = new Intent(AboutActivity.this, LicenseActivity.class);
+                startActivity(intent);
             }
         });
-        Button clickButton = (Button) findViewById(R.id.button);
-        clickButton.setOnClickListener(new View.OnClickListener() {
 
+        findViewById(R.id.button_ok).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.google.com"));
-                //startActivity(browserIntent);
-                startActivity(new Intent(getApplicationContext(), LicenseActivity.class));
+                finish();
             }
         });
+        new AlertDialog.Builder(this)
+                .setTitle("Achtung")
+                .setMessage("Dies ist eine Beta Version!")
+                .setPositiveButton(android.R.string.ok, null).show();
     }
 
     @Override
@@ -49,4 +52,11 @@ public class AboutActivity extends AppCompatActivity {
         return true;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        // Shows the debug warning, if this is a debug build and the warning has not been shown yet
+
+    }
 }

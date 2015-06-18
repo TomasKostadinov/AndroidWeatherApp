@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Weather</string>
+    <string name="app_name">Weather App</string>
     <string name="action_settings">Settings</string>
     <string name="action_exit">Close App</string>
     <string name="drawer_open">Open</string>
@@ -8,14 +8,6 @@
     <string name="nav_item_weather">Weather</string>
     <string name="nav_item_help_and_support">Help &amp; Support</string>
     <string name="nav_item_settings">Settings</string>
-
-    <!-- navigation drawer item labels  -->
-    <string-array name="nav_drawer_labels">
-        <item>@string/nav_item_weather</item>
-        <item>@string/nav_item_help_and_support</item>
-        <item>@string/about</item>
-        <item>@string/nav_item_settings</item>
-    </string-array>
 
     <string name="title_settings">Settings</string>
     <string name="title_help_and_support">Help &amp; Support</string>
@@ -27,7 +19,7 @@
     <string name="sunrise">Sunrise</string>
     <string name="sunset">Sunset</string>
     <string name="refresh">Refresh</string>
-    <string name="downloading_data">Downloading Data...</string>
+    <string name="downloading_data">Downloading Data&#8230;</string>
 
     <!--Countries-->
     <string name="kAF" translatable="false">AF</string>
@@ -588,5 +580,11 @@
     <string name="cache">Cache</string>
     <string name="cachetitle">Activate Caching</string>
     <string name="cachesumm">Saves downloaded data for offline usage</string>
+    <string name="share_using">Share with...</string>
+    <string name="version">Copyright © 2015 Tomas Kostadinov \nContact: <a href="mailto:tomas.kostadinov@gmx.de">tomas.kostadinov@gmx.de</a>\nLogos © Andreas Kahlöfer</string>
+    <string name="versionDesc" translatable="false">Version: 0.9.4.4\n</string>
+    <string name="aroudtheworld" translatable="false">Around the World</string>
+    <string name="aroudtheworldsumm">Activate "Around the World"-function</string>
+    <string name="places">Recommended Places</string>
 
 </resources>

@@ -1,18 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Wetter</string>
+    <string name="app_name">Wetter App</string>
     <string name="about">Über diese App</string>
     <string name="action_exit">Beenden</string>
     <string name="action_settings">Einstellungen</string>
     <string name="close">Schließen</string>
     <string name="drawer_open">Öffnen</string>
     <!-- navigation drawer item labels  -->
-    <string-array name="nav_drawer_labels">
-        <item>Wettervorhersage</item>
-        <item>Hilfe &amp; Support</item>
-        <item>Über diese App</item>
-        <item>Einstellungen</item>
-    </string-array>
     <string name="unknown_error">Ein Fehler ist aufgetreten :(</string>
     <string name="windspeed">Windgeschwindigkeit</string>
     <string name="humidity">Luftfeuchtigkeit</string>
@@ -52,4 +46,8 @@
     <string name="cache">Cache</string>
     <string name="cachetitle">Cache aktivieren</string>
     <string name="cachesumm">Wetterdaten für offline Nutzung speichern</string>
+    <string name="share_using">Teilen mit...</string>
+    <string name="version">© 2015 Tomas Kostadinov \nKontakt: <a href="mailto:tomas.kostadinov@gmx.de">tomas.kostadinov@gmx.de</a>\n\nQuellcode ist auf <a href="https://github.com/tomaskostadinov/androidweatherapp">Github</a> \n\nIcons © Andreas Kahlöfer</string>
+    <string name="aroudtheworldsumm">[BETA] "Around the world" - Funktion aktivieren</string>
+    <string name="places">Empfohlene Orte</string>
 </resources>

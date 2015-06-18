@@ -8,8 +8,15 @@
         android:title="@string/refresh"
         android:orderInCategory="100"
         android:icon="@drawable/ic_action_refresh"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="always" />
 
+    <item
+        android:id="@+id/action_share"
+        android:title="@string/refresh"
+        android:orderInCategory="100"
+        android:icon="@drawable/abc_ic_menu_share_mtrl_alpha"
+        app:showAsAction="ifRoom" />
+    <!--
     <item
         android:id="@+id/action_settings"
         android:title="@string/action_settings"
@@ -24,5 +31,5 @@
         android:id="@+id/action_exit"
         android:title="@string/action_exit"
         android:orderInCategory="100"
-        app:showAsAction="never" />
+        app:showAsAction="never" />-->
 </menu>

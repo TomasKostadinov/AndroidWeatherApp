@@ -1,10 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#009687</color>
-    <color name="colorPrimaryDark">#005A51</color>
+    <!--<color name="colorPrimary">#009687</color>
+    <color name="colorPrimaryDark">#005A51</color>-->
+    <color name="colorPrimary">#4C84B6</color>
+    <color name="colorPrimaryDark">#3D6A92</color>
+    <color name="colorPrimaryLight">#5C98CD</color>
     <color name="textColorPrimary">#FFFFFF</color>
     <color name="windowBackground">#FFFFFF</color>
     <color name="navigationBarColor">#000000</color>
     <color name="colorAccent">#ff6d00</color>
     <color name="cardBackground">#FFFFFF</color>
+
+    <color name="card1">#E9B96D</color>
+    <color name="card2">#B4ABA6</color>
+    <color name="card3">#35455C</color>
+    <color name="card4">#435A62</color>
+
+    <color name="body_text_1">#de000000</color>
+    <color name="body_text_2">#8a000000</color>
+    <color name="body_text_3">#60000000</color>
+    <color name="body_text_disabled">#44000000</color>
+
+    <color name="body_text_1_inverse">#deffffff</color>
+    <color name="body_text_2_inverse">#8affffff</color>
+
+    <color name="theme_accent_2">#e91e63</color>
+
+    <color name="all_track_color">#ff222222</color>
+    <color name="home_pane_header">#99000000</color>
+
+    <color name="sliding_pane_content_fade">#cceeeeee</color>
+    <color name="sticky_block_background">#ddffffff</color>
+
+    <color name="gray_background">#e5e5e5</color>
+    <color name="dark_divider">#32000000</color>
+
+    <color name="data_item_background_light">#ffffff</color>
+    <color name="data_item_lightbg_title">#404040</color>
+    <color name="data_item_lightbg_body_text">#707070</color>
+    <color name="data_item_lightbg_dim_text">#e0e0e0</color>
+
+    <color name="list_dropdown_divider_color">#92a3a3a3</color>
+    <color name="butter_bar_light">#eee0e0e0</color>
+
+    <color name="translucent_actionbar_background">#cc3f51b5</color>
+    <color name="translucent_statusbar_background">#cc3f51b5</color>
+
+    <color name="translucent_actionbar_background_dark">#33000000</color>
+
 </resources>

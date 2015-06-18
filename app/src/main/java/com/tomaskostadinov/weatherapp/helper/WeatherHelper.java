@@ -23,7 +23,6 @@ public class WeatherHelper {
     private Double temperature_max, speed;
     private Integer istat = R.drawable.ic_sunny;
 
-
     public void setCity(String in){
         city = in;
     }
@@ -216,7 +215,7 @@ public class WeatherHelper {
 
     public String convertTime(Integer Time){
         Date date = new Date(Time*1000L); // *1000 Convertiert Sekunden in Millisekunden
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss"); // Datumsformat
+        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM, HH:mm:ss"); // Datumsformat
         //sdf.setTimeZone(TimeZone.getTimeZone("GMT+2")); // Zeitzone
         formattedDater = sdf.format(date);
         return formattedDater;

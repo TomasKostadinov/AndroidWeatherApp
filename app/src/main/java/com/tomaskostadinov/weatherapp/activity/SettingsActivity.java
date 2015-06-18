@@ -48,12 +48,15 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         LinearLayout root = (LinearLayout)findViewById(android.R.id.list).getParent().getParent().getParent();
         Toolbar bar = (Toolbar) LayoutInflater.from(this).inflate(R.layout.toolbar_settings, root, false);
         root.addView(bar, 0); // insert at top
+
+        bar.setNavigationIcon(R.drawable.abc_ic_ab_back_mtrl_am_alpha);
         bar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                onBackPressed();
             }
         });
+
         final Preference prefTranslation = (Preference) findPreference("translation");
         prefTranslation.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             public boolean onPreferenceClick(Preference pref) {

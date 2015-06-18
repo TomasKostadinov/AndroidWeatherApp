@@ -22,20 +22,12 @@ import com.tomaskostadinov.weatherapp.R;
 public class LicenseActivity extends ActionBarActivity{
 
     private Toolbar mToolbar;
+    public WebView wv;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_license);
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        mToolbar.setNavigationIcon(R.drawable.abc_ic_ab_back_mtrl_am_alpha);
-        setSupportActionBar(mToolbar);
-        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
-        WebView wv = (WebView)this.findViewById(R.id.webView);
+        wv = (WebView)this.findViewById(R.id.webView);
         wv.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
@@ -44,11 +36,11 @@ public class LicenseActivity extends ActionBarActivity{
             }
         });
         wv.loadUrl("file:///android_asset/license.html");
-    }
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_cancel, menu);
-        return true;
+        findViewById(R.id.button_ok).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 }
