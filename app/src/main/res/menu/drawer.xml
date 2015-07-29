@@ -17,7 +17,7 @@
                 android:title="@string/places"/>
             <item
                 android:id="@+id/navigation_item_2"
-                android:icon="@drawable/ic_place"
+                android:icon="@drawable/ic_help"
                 android:title="@string/nav_item_help_and_support"/>
         </menu>
     </item>
@@ -33,7 +33,7 @@
             android:title="@string/about"/>
         <item
             android:id="@+id/beta"
-            android:icon="@drawable/ic_settings"
+            android:icon="@drawable/ic_error"
             android:title="@string/beta_settings"/>
         <item
             android:id="@+id/settings"
