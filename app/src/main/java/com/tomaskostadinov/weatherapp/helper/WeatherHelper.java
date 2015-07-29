@@ -94,6 +94,10 @@ public class WeatherHelper {
         return speed;
     }
 
+    /**
+     *man
+     * @param in json input
+     */
     public void ParseData(String in){
         try {
             JSONObject reader = new JSONObject(in);
@@ -124,6 +128,11 @@ public class WeatherHelper {
         }
     }
 
+    /**
+     *
+     * @param ID the weather id
+     * @return Integer weather drawable
+     */
     public Integer convertWeather(Integer ID){
         switch (ID){
             case 200:
@@ -213,6 +222,11 @@ public class WeatherHelper {
         return istat;
     }
 
+    /**
+     *
+     * @param Time unix timestamp
+     * @return SimpleDateFormat
+     */
     public String convertTime(Integer Time){
         Date date = new Date(Time*1000L); // *1000 Convertiert Sekunden in Millisekunden
         SimpleDateFormat sdf = new SimpleDateFormat("dd.MM, HH:mm:ss"); // Datumsformat

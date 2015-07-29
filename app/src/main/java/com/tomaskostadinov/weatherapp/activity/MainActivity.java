@@ -1,20 +1,22 @@
 package com.tomaskostadinov.weatherapp.activity;
 
-import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
+import android.view.ViewTreeObserver;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -25,16 +27,6 @@ import android.widget.TextView;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
-import com.mikepenz.materialdrawer.Drawer;
-import com.mikepenz.materialdrawer.DrawerBuilder;
-import com.mikepenz.materialdrawer.accountswitcher.AccountHeader;
-import com.mikepenz.materialdrawer.accountswitcher.AccountHeaderBuilder;
-import com.mikepenz.materialdrawer.model.DividerDrawerItem;
-import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
-import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
-import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
-import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
-import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import com.tomaskostadinov.weatherapp.R;
 import com.tomaskostadinov.weatherapp.helper.NotificationHelper;
 import com.tomaskostadinov.weatherapp.helper.WeatherHelper;
@@ -48,9 +40,8 @@ import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity{
 
-
     private Toolbar mToolbar;
-    TextView temp, loc, windspeed, press, hum, suns, sunr, desc;
+    TextView temp, loc, windspeed, press, hum, suns, sunr, desc, currloc;
     ImageView todayStat;
     ScrollView sv;
     ImageButton fab; //The floating action button
@@ -65,8 +56,10 @@ public class MainActivity extends AppCompatActivity{
     NotificationHelper NotificationHelper;
     WeatherHelper WeatherHelper;
 
-    public Drawer result;
     public Bundle extras;
+    public DrawerLayout drawerLayout;
+    public NavigationView navview;
+    public SwipeRefreshLayout mSwipeRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,11 +76,11 @@ public class MainActivity extends AppCompatActivity{
         }
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
-        mToolbar.setSubtitle(city);
         //mToolbar.setLogo(R.mipmap.ic_launcher);
-        //getSupportActionBar().setDisplayShowHomeEnabled(true);
-
-        startActivity(new Intent(getApplicationContext(), ForecastActivity.class));
+        if (mToolbar != null) {
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+            mToolbar.setNavigationIcon(R.drawable.ic_menu);
+        }
         /**
          * Helper classes
          */
@@ -108,6 +101,7 @@ public class MainActivity extends AppCompatActivity{
          */
 
         temp = (TextView)findViewById(R.id.t);
+        currloc = (TextView)findViewById(R.id.current_location);
         loc = (TextView)findViewById(R.id.l);
         windspeed = (TextView)findViewById(R.id.windspeed);
         press = (TextView)findViewById(R.id.pressure);
@@ -122,6 +116,7 @@ public class MainActivity extends AppCompatActivity{
          * Removing that ugly overscroll effect
          * Setting ScrollView's & ErrorLayout's visibility to gone -> displaying the LoadingLayout
          */
+
         sv.setOverScrollMode(View.OVER_SCROLL_NEVER);
         sv.setVisibility(View.GONE);
         ErrorLayout.setVisibility(View.GONE);
@@ -130,13 +125,14 @@ public class MainActivity extends AppCompatActivity{
          * Starting
          */
 
-        getWeatherData();
+        getWeatherData(true);
 
         /**
          * [BETA] Starting, if activated, WeatherService to sync the weather data in Background
          * Current Status: Download fails
          * TODO fix problems
          */
+
         if(prefs.getBoolean("bgprocess", false)) {
             Intent intent = new Intent(this, WeatherService.class);
             PendingIntent PI = PendingIntent.getService(this, 0, intent, 0);
@@ -145,87 +141,59 @@ public class MainActivity extends AppCompatActivity{
             Calendar cal = Calendar.getInstance();
             alarm.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), 30 * 60 * 1000, PI);
         }
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
-        /**
-         * Setting up navigation drawer header
-         * TODO FIRST, SECOND & THIRD CITY SUPPORT
-         */
+        navview = (NavigationView) findViewById(R.id.navigation_view);
+        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.activity_main_swipe_refresh_layout);
+        mSwipeRefreshLayout.setProgressViewOffset(true, 100, 150);
+        mSwipeRefreshLayout.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
+            @Override
+            public void onScrollChanged() {
+                int scrollY = sv.getScrollY();
+                if (scrollY == 0) mSwipeRefreshLayout.setEnabled(true);
+                else mSwipeRefreshLayout.setEnabled(false);
+            }
+        });
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getWeatherData(false);
+            }});
 
-        AccountHeader headerResult = new AccountHeaderBuilder()
-                .withProfileImagesVisible(false)
-                .withActivity(this)
-                .withHeaderBackground(R.drawable.header)
-                .addProfiles(
-                        new ProfileDrawerItem().withEmail(prefs.getString("location", "Berlin")).withIcon(getResources().getDrawable(R.drawable.ic_cloud))
-                )
-                .withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
-                    @Override
-                    public boolean onProfileChanged(View view, IProfile profile, boolean currentProfile) {
-                        return false;
-                    }
-                })
-                .build();
-
-        //Now create your drawer and pass the AccountHeader.Result
-        result = new DrawerBuilder()
-                .withTranslucentStatusBar(true)
-
-                .withActivity(this)
-                .withToolbar(mToolbar)
-                .withAccountHeader(headerResult)
-                .addDrawerItems(
-                        new PrimaryDrawerItem().withName("Wettervorhersage").withIcon(getResources().getDrawable(R.drawable.ic_sunny)),
-                        new PrimaryDrawerItem().withName(R.string.places).withIcon(getResources().getDrawable(R.drawable.ic_place)),
-                        new DividerDrawerItem(),
-                        new SecondaryDrawerItem().withName(R.string.nav_item_help_and_support).withIcon(getResources().getDrawable(R.drawable.ic_help)),
-                        new SecondaryDrawerItem().withName(R.string.about).withIcon(getResources().getDrawable(R.mipmap.ic_launcher)),
-                        new DividerDrawerItem(),
-                        new SecondaryDrawerItem().withName(R.string.title_settings).withIcon(getResources().getDrawable(R.drawable.ic_settings))
-                ).withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
-                    @Override
-                    public boolean onItemClick(AdapterView<?> parent, View view, int position, long id, IDrawerItem drawerItem) {
-                        switch (position) {
-                            case 0:
-                                startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                                return true;
-                            case 1:
-                                startActivity(new Intent(getApplicationContext(), PlaceActivity.class));
-                                result.setSelection(0);
-                                return true;
-                            case 3:
-                                result.setSelection(0);
-                                Intent i = new Intent(Intent.ACTION_VIEW);
-                                Uri data = Uri.parse("mailto:tomas.kostadinov@gmx.de?subject=Android Weather App");
-                                i.setData(data);
-                                startActivity(i);
-                                return true;
-                            case 4:
-                                startActivity(new Intent(getApplicationContext(), AboutActivity.class));
-                                result.setSelection(0);
-                                return true;
-                            case 5:
-                                startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
-                                result.setSelection(0);
-                                return true;
-                            case 6:
-                                startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
-                                result.setSelection(0);
-                                return true;
-                            default:
-                                result.closeDrawer();
-                                return true;
-                        }
-                    }
-                }).build();
+        navview.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(MenuItem menuItem) {
+                int id = menuItem.getItemId();
+                switch (id) {
+                    case R.id.home:
+                        drawerLayout.closeDrawer(GravityCompat.START);
+                        return true;
+                    case R.id.place:
+                        startActivity(new Intent(getApplicationContext(), ForecastActivity.class));
+                        return true;
+                    case R.id.about:
+                        startActivity(new Intent(getApplicationContext(), AboutActivity.class));
+                        return true;
+                    case R.id.settings:
+                        startActivity(new Intent(getApplicationContext(), SettingsActivity.class));;
+                        return true;
+                    case R.id.beta:
+                        startActivity(new Intent(getApplicationContext(), BetaSettingsActivity.class));;
+                        return true;
+                }
+                return true;
+            }
+        });
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        getWeatherData();
+        getWeatherData(false);
     }
 
-    public void getWeatherData(){
+    public void getWeatherData(Boolean notification){
+        final Boolean not = notification;
         /**
          * Get settings
          */
@@ -238,28 +206,27 @@ public class MainActivity extends AppCompatActivity{
         }
         unit = prefs.getString("unitcode", "metric");
         language = prefs.getString("lang", "de");
-        mToolbar.setSubtitle(city);
         /**
          * Start JSON data download
          */
         AsyncHttpClient client = new AsyncHttpClient();
-        client.get("http://api.openweathermap.org/data/2.5/weather?q=" + city + "," + CountryCode + "&units=" + unit +"&lang=" + language, new AsyncHttpResponseHandler() {
+        client.get("http://api.openweathermap.org/data/2.5/weather?q=" + city + "," + CountryCode + "&units=" + unit + "&lang=" + language, new AsyncHttpResponseHandler() {
 
             @Override
             public void onStart() {
-                // called before request is started
-                /**
-                 * Only for testing
-                 */
+                mSwipeRefreshLayout.setRefreshing(true);
             }
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] response) {
+                if(mSwipeRefreshLayout.isRefreshing()){
+                    mSwipeRefreshLayout.setRefreshing(false);
+                }
                 // called when response HTTP status is "200 OK"
                 String in = new String(response);
-                if(in != ""){
+                if (in != "") {
                     WeatherHelper.ParseData(in);
-                    UpdateData();
+                    UpdateData(not);
                     sv.setVisibility(View.VISIBLE);
                     LoadingLayout.setVisibility(View.VISIBLE);
                 } else {
@@ -290,7 +257,7 @@ public class MainActivity extends AppCompatActivity{
         });
     }
 
-    public void UpdateData(){
+    public void UpdateData(Boolean notification){
         fab.bringToFront();
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -302,6 +269,7 @@ public class MainActivity extends AppCompatActivity{
          * Writing data to TextView
          */
         loc.setText(WeatherHelper.getCity());
+        currloc.setText(WeatherHelper.getCity());
         temp.setText(String.format("%.1f", WeatherHelper.getTemperature_max()) + "°");
         desc.setText(WeatherHelper.getDescription());
         windspeed.setText(WeatherHelper.getSpeed().toString() + " km/h");
@@ -313,7 +281,9 @@ public class MainActivity extends AppCompatActivity{
          * Setting Sun/Cloud/... Image from converted weather id
          */
         todayStat.setImageResource(WeatherHelper.convertWeather(WeatherHelper.getWeatherId()));
-        sendNotification();
+        if(notification){
+            sendNotification();
+        }
     }
 
     public void sendNotification(){
@@ -338,7 +308,7 @@ public class MainActivity extends AppCompatActivity{
              */
             if (prefs.getString("cached", "") != ""){
                 WeatherHelper.ParseData(prefs.getString("cached", ""));
-                UpdateData();
+                UpdateData(true);
             }
         }
     }
@@ -352,14 +322,15 @@ public class MainActivity extends AppCompatActivity{
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
+        // Handle tool bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        if(id == R.id.action_refresh){
-            getWeatherData();
-            return true;
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                drawerLayout.openDrawer(GravityCompat.START);
+                return true;
         }
 
         if(id == R.id.action_share){
@@ -376,8 +347,9 @@ public class MainActivity extends AppCompatActivity{
 
     @Override
     public void onBackPressed(){
-        if(result.isDrawerOpen()){
-            result.closeDrawer();
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
+            Toast.makeText(getBaseContext(), "lol", Toast.LENGTH_LONG).show();
             b = 0;
         } else {
             if(prefs.getBoolean("doubleback", true)){

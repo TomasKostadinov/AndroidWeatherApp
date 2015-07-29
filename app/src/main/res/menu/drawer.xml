@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<group android:checkableBehavior="single">
+    <item
+        android:id="@+id/navigation_subheader"
+        android:title="@string/app_name">
+        <menu>
+            <item
+                android:id="@+id/home"
+                android:checked="true"
+                android:icon="@mipmap/ic_launcher"
+                android:title="@string/forecast"/>
+            <item
+                android:id="@+id/place"
+                android:checked="true"
+                android:icon="@drawable/ic_place"
+                android:title="@string/places"/>
+            <item
+                android:id="@+id/navigation_item_2"
+                android:icon="@drawable/ic_place"
+                android:title="@string/nav_item_help_and_support"/>
+        </menu>
+    </item>
+</group>
+
+<item
+    android:id="@+id/navigation_subheader1"
+    android:title="@string/action_settings">
+    <menu>
+        <item
+            android:id="@+id/about"
+            android:icon="@drawable/ic_info"
+            android:title="@string/about"/>
+        <item
+            android:id="@+id/beta"
+            android:icon="@drawable/ic_settings"
+            android:title="@string/beta_settings"/>
+        <item
+            android:id="@+id/settings"
+            android:icon="@drawable/ic_settings"
+            android:title="@string/action_settings"/>
+    </menu>
+</item>
+</menu>

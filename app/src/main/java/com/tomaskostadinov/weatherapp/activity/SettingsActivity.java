@@ -38,8 +38,8 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        addPreferencesFromResource(R.xml.user_settings);
 
+        addPreferencesFromResource(R.xml.user_settings);
         // show the current value in the settings screen
         for (int i = 0; i < getPreferenceScreen().getPreferenceCount(); i++) {
             initSummary(getPreferenceScreen().getPreference(i));
@@ -56,7 +56,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
                 onBackPressed();
             }
         });
-
+        bar.setTitleTextColor(getResources().getColor(R.color.background_floating_material_light));
         final Preference prefTranslation = (Preference) findPreference("translation");
         prefTranslation.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             public boolean onPreferenceClick(Preference pref) {

@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.support.v7.app.NotificationCompat;
 
 import com.tomaskostadinov.weatherapp.R;
 import com.tomaskostadinov.weatherapp.activity.MainActivity;
@@ -64,6 +65,8 @@ public class NotificationHelper {
                 .setAutoCancel(true)
                 .setContentTitle(this.title)
                 .setContentText(this.descrion)
+                // ???
+                .setStyle(new Notification.BigTextStyle().bigText(this.descrion))
                 .setVibrate(new long[]{100, 100, 100, 100})
                 .setLights(Color.YELLOW, 1000, 1000);
         Notification n = builder.build();

@@ -50,4 +50,5 @@
     <string name="version">© 2015 Tomas Kostadinov \nKontakt: <a href="mailto:tomas.kostadinov@gmx.de">tomas.kostadinov@gmx.de</a>\n\nQuellcode ist auf <a href="https://github.com/tomaskostadinov/androidweatherapp">Github</a> \n\nIcons © Andreas Kahlöfer</string>
     <string name="aroudtheworldsumm">[BETA] "Around the world" - Funktion aktivieren</string>
     <string name="places">Empfohlene Orte</string>
+    <string name="fi" translatable="false">Wettervorhersage</string>
 </resources>

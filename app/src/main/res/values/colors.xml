@@ -8,6 +8,7 @@
     <color name="textColorPrimary">#FFFFFF</color>
     <color name="windowBackground">#FFFFFF</color>
     <color name="navigationBarColor">#000000</color>
+    <color name="colorAccentPrimary">#3498db</color>
     <color name="colorAccent">#ff6d00</color>
     <color name="cardBackground">#FFFFFF</color>
 

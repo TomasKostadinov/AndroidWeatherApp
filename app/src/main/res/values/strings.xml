@@ -586,5 +586,6 @@
     <string name="aroudtheworld" translatable="false">Around the World</string>
     <string name="aroudtheworldsumm">Activate "Around the World"-function</string>
     <string name="places">Recommended Places</string>
+    <string name="forecast">Weatherforecast</string>
 
 </resources>
