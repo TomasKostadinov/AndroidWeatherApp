@@ -3,20 +3,27 @@ package com.tomaskostadinov.weatherapp.activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -32,6 +39,7 @@ import com.tomaskostadinov.weatherapp.helper.NotificationHelper;
 import com.tomaskostadinov.weatherapp.helper.WeatherHelper;
 
 import org.apache.http.Header;
+import org.w3c.dom.Text;
 
 import android.os.Handler;
 import android.widget.Toast;
@@ -44,9 +52,8 @@ public class MainActivity extends AppCompatActivity{
     TextView temp, loc, windspeed, press, hum, suns, sunr, desc, currloc;
     ImageView todayStat;
     ScrollView sv;
-    ImageButton fab; //The floating action button
+    FloatingActionButton fab;
     LinearLayout ErrorLayout;
-    RelativeLayout LoadingLayout;
     String city, CountryCode, language, unit;
 
     private Handler mHandler = new Handler();
@@ -60,6 +67,8 @@ public class MainActivity extends AppCompatActivity{
     public DrawerLayout drawerLayout;
     public NavigationView navview;
     public SwipeRefreshLayout mSwipeRefreshLayout;
+    public CheckBox dontShowAgain;
+    public static final String PREFS_NAME = "updates";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,7 +102,6 @@ public class MainActivity extends AppCompatActivity{
          */
 
         ErrorLayout = (LinearLayout) findViewById(R.id.error);
-        LoadingLayout = (RelativeLayout) findViewById(R.id.loading);
         sv = (ScrollView) findViewById(R.id.scroll_view);
 
         /**
@@ -110,11 +118,11 @@ public class MainActivity extends AppCompatActivity{
         suns = (TextView)findViewById(R.id.sunset);
         desc = (TextView)findViewById(R.id.desc);
         todayStat = (ImageView) findViewById(R.id.stattoday);
-        fab = (ImageButton) findViewById(R.id.imageButton);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
 
         /**
          * Removing that ugly overscroll effect
-         * Setting ScrollView's & ErrorLayout's visibility to gone -> displaying the LoadingLayout
+         * Setting ScrollView's & ErrorLayout's visibility to gone
          */
 
         sv.setOverScrollMode(View.OVER_SCROLL_NEVER);
@@ -158,7 +166,8 @@ public class MainActivity extends AppCompatActivity{
             @Override
             public void onRefresh() {
                 getWeatherData(false);
-            }});
+            }
+        });
 
         navview.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -169,21 +178,69 @@ public class MainActivity extends AppCompatActivity{
                         drawerLayout.closeDrawer(GravityCompat.START);
                         return true;
                     case R.id.place:
-                        startActivity(new Intent(getApplicationContext(), ForecastActivity.class));
+                        drawerLayout.closeDrawer(GravityCompat.START);
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                startActivity(new Intent(getApplicationContext(), PlaceActivity.class));
+                            }
+                        }, 250);
                         return true;
                     case R.id.about:
-                        startActivity(new Intent(getApplicationContext(), AboutActivity.class));
+                        drawerLayout.closeDrawer(GravityCompat.START);
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                startActivity(new Intent(getApplicationContext(), AboutActivity.class));
+                            }
+                        }, 250);
                         return true;
                     case R.id.settings:
-                        startActivity(new Intent(getApplicationContext(), SettingsActivity.class));;
+                        drawerLayout.closeDrawer(GravityCompat.START);
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
+                            }
+                        }, 250);
                         return true;
                     case R.id.beta:
-                        startActivity(new Intent(getApplicationContext(), BetaSettingsActivity.class));;
+                        drawerLayout.closeDrawer(GravityCompat.START);
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                startActivity(new Intent(getApplicationContext(), BetaSettingsActivity.class));
+                            }
+                        }, 250);
+                        return true;
+                    case R.id.tomorrow:
+                        drawerLayout.closeDrawer(GravityCompat.START);
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                startActivity(new Intent(getApplicationContext(), ForecastActivity.class));
+                            }
+                        }, 250);
                         return true;
                 }
                 return true;
             }
         });
+        final SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        if(!settings.getBoolean("updatenews1", false)){
+            AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle);
+            builder.setTitle("Neu in " + getResources().getString(R.string.versionDesc));
+            builder.setMessage(Html.fromHtml("- Zum Aktualsieren nach unten ziehen (Pull-to-Refresh)<br/>- \"Aktuelles Wetter teilen\"-Funktion<br/>- Vorbereitung auf Wettervorhersage-Funktion <br/>- Design Updates (Neuer Navigation Drawer)<br/>- Verbesserungen, Bugfixes<br/><br/><b>BITTE ALLE BUGS + FEHLER MELDEN!<br/> FEATURE REQUESTS ERWÜNSCHT!</b>"));
+            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    SharedPreferences.Editor editor = settings.edit();
+                    editor.putBoolean("updatenews1", true);
+                    // Commit the edits!
+                    editor.apply();
+                }
+            });
+            builder.show();
+        }
     }
 
     @Override
@@ -219,20 +276,15 @@ public class MainActivity extends AppCompatActivity{
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] response) {
-                if(mSwipeRefreshLayout.isRefreshing()){
-                    mSwipeRefreshLayout.setRefreshing(false);
-                }
                 // called when response HTTP status is "200 OK"
                 String in = new String(response);
                 if (in != "") {
                     WeatherHelper.ParseData(in);
                     UpdateData(not);
                     sv.setVisibility(View.VISIBLE);
-                    LoadingLayout.setVisibility(View.VISIBLE);
                 } else {
                     ErrorLayout.setVisibility(View.VISIBLE);
                     sv.setVisibility(View.GONE);
-                    LoadingLayout.setVisibility(View.GONE);
                     getCachedData();
                 }
             }
@@ -245,7 +297,6 @@ public class MainActivity extends AppCompatActivity{
                  * TODO Find a better solution for this
                  */
                 sv.setVisibility(View.GONE);
-                LoadingLayout.setVisibility(View.GONE);
                 ErrorLayout.setVisibility(View.VISIBLE);
                 getCachedData();
             }
@@ -262,7 +313,7 @@ public class MainActivity extends AppCompatActivity{
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), DesignTest.class));
+                startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
             }
         });
         /**
@@ -283,6 +334,9 @@ public class MainActivity extends AppCompatActivity{
         todayStat.setImageResource(WeatherHelper.convertWeather(WeatherHelper.getWeatherId()));
         if(notification){
             sendNotification();
+        }
+        if(mSwipeRefreshLayout.isRefreshing()){
+            mSwipeRefreshLayout.setRefreshing(false);
         }
     }
 
@@ -349,7 +403,6 @@ public class MainActivity extends AppCompatActivity{
     public void onBackPressed(){
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START);
-            Toast.makeText(getBaseContext(), "lol", Toast.LENGTH_LONG).show();
             b = 0;
         } else {
             if(prefs.getBoolean("doubleback", true)){

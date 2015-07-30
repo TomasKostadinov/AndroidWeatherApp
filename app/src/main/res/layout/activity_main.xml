@@ -13,6 +13,7 @@
         android:layout_height="match_parent">
 
     <android.support.v4.widget.SwipeRefreshLayout
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:id="@+id/activity_main_swipe_refresh_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -20,15 +21,15 @@
     <FrameLayout
     android:layout_height="match_parent"
     android:layout_width="match_parent">
-
-        <ImageButton
-            android:layout_margin="15dp"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
+        <android.support.design.widget.FloatingActionButton
+            app:layout_scrollFlags="scroll|enterAlways"
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:src="@drawable/ic_place"
-            android:background="@drawable/floating_action_button_circle"
-            android:id="@+id/imageButton"
-            android:layout_gravity="right|bottom" />
+            android:layout_gravity="bottom|end"
+            app:elevation="6dp"
+            app:pressedTranslationZ="12dp"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -50,7 +51,6 @@
             android:layout_height="0dp"
             android:layout_weight="1" />
             <ScrollView
-                app:layout_behavior="@string/appbar_scrolling_view_behavior"
                 android:fadingEdge="none"
                 xmlns:android="http://schemas.android.com/apk/res/android"
                 android:id="@+id/scroll_view"
@@ -443,42 +443,6 @@
                 </ScrollView>
             </FrameLayout>
         </LinearLayout>
-        <RelativeLayout
-            android:id="@+id/loading"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/loadingtitle"
-                android:layout_alignParentTop="true"
-                android:layout_marginTop="100dp"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:textSize="45dp"
-                android:text="Laden..."
-                android:textStyle="bold"/>
-
-            <TextView
-                android:layout_below="@id/loadingtitle"
-                android:layout_centerInParent="true"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:textSize="12dp"
-                android:layout_marginTop="10dp"
-                android:gravity="center_horizontal"
-                android:text="Bitte warten..." />
-
-            <ProgressBar
-                android:layout_below="@id/loadingtitle"
-                android:layout_centerInParent="true"
-                android:layout_alignParentBottom="true"
-                android:id="@+id/progressBarq"
-                style="?android:attr/progressBarStyleLarge"
-                android:layout_width="32dp"
-                android:layout_height="wrap_content" />
-        </RelativeLayout>
     </LinearLayout>
     </FrameLayout>
     </android.support.v4.widget.SwipeRefreshLayout>
