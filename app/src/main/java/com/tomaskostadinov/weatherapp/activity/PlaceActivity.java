@@ -3,12 +3,25 @@ package com.tomaskostadinov.weatherapp.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.View;
 import android.widget.ScrollView;
 import android.widget.Toast;
 
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.tomaskostadinov.weatherapp.R;
+import com.tomaskostadinov.weatherapp.adapter.PlaceAdapter;
+import com.tomaskostadinov.weatherapp.model.Place;
+
+import org.apache.http.Header;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 /**
  * Created by Tomas on 31.05.2015.
@@ -16,37 +29,85 @@ import com.tomaskostadinov.weatherapp.R;
  */
 public class PlaceActivity extends AppCompatActivity {
 
-    Toolbar mToolbar;
+    Toolbar toolbar;
     ScrollView ScrollView;
+
+    public ArrayList<Place> items;
+    PlaceAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_places);
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        mToolbar.setTitle(" " + getResources().getString(R.string.places));
-        mToolbar.setBackgroundColor(getResources().getColor(R.color.translucent_actionbar_background_dark));
-        setSupportActionBar(mToolbar);
-        mToolbar.setLogo(R.drawable.ic_place);
-        ScrollView = (ScrollView) findViewById(R.id.scroll_view);
-        ScrollView.setOverScrollMode(View.OVER_SCROLL_NEVER);
-        mToolbar.setNavigationIcon(R.drawable.abc_ic_ab_back_mtrl_am_alpha);
-        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
+        setContentView(R.layout.testlayout);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        items = new ArrayList<>();
+        downloadJSON();
+
+        RecyclerView rvUsers = (RecyclerView) findViewById(R.id.rvUsers);
+        // Create adapter passing in the sample user data
+        adapter = new PlaceAdapter(this, getThronesCharacters());
+        // Attach the adapter to the recyclerview to populate items
+        rvUsers.setAdapter(adapter);
+        // Set layout manager to position the items
+        rvUsers.setLayoutManager(new LinearLayoutManager(this));
+
 
     }
 
-    public void showDetails(View v){
-        switch (v.toString()){
-            default:
-                Toast.makeText(getApplicationContext(), v.toString(), Toast.LENGTH_SHORT).show();
+    private ArrayList<Place> getThronesCharacters() {
+        return items;
+    }
 
+    public void downloadJSON(){
+        AsyncHttpClient client = new AsyncHttpClient();
+        client.get("http://192.168.43.2/api/dj/data.json", new AsyncHttpResponseHandler() {
+            @Override
+            public void onStart() {
+                // called before request is started
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] response) {
+                // called when response HTTP status is "200 OK"
+                String in = new String(response);
+                parse(in);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
+                // called when response HTTP status is "4XX" (eg. 401, 403, 404)
+
+                Toast.makeText(PlaceActivity.this, "Fail", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onRetry(int retryNo) {
+                // called when request is retried
+            }
+        });
+    }
+
+    public void parse(String in){
+        try {
+            JSONObject reader = new JSONObject(in);
+
+            JSONArray weather  = reader.getJSONArray("voting");
+            for (int i = 0; i < weather.length(); i++) {
+                Toast.makeText(this, "Test", Toast.LENGTH_SHORT).show();
+                JSONObject JSONWeather = weather.getJSONObject(i);
+                String song = JSONWeather.getString("song");
+                String interpret = JSONWeather.getString("interpret");
+                String logo = JSONWeather.getString("logo");
+                Integer points = JSONWeather.getInt("points");
+                Long timereq = JSONWeather.getLong("timerequested");
+                items.add(new Place(song, interpret, points, 2, timereq));
+                adapter.notifyItemInserted(0);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
         }
-        //Intent i = new Intent(getApplicationContext(), SettingsActivity.class);
-        //startActivity(i);
     }
 }

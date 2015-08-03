@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.format.DateUtils;
 import android.view.View;
 import android.widget.ScrollView;
 import android.widget.Toast;
@@ -100,8 +101,8 @@ public class ForecastActivity extends AppCompatActivity {
     }
     public void getForecast(){
         WeatherForecastHelper.getWeatherForecastForId(1);
-        Toast.makeText(getApplicationContext(), WeatherHelper.convertTime(WeatherForecastHelper.date), Toast.LENGTH_SHORT).show();
 
+        Toast.makeText(getApplicationContext(), WeatherHelper.convertTime(WeatherForecastHelper.date), Toast.LENGTH_SHORT).show();
     }
 
 }

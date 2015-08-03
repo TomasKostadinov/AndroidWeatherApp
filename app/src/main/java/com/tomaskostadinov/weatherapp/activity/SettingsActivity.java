@@ -12,6 +12,7 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
+import android.provider.SearchRecentSuggestions;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.AppCompatCheckedTextView;
@@ -29,9 +30,10 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 
 import com.tomaskostadinov.weatherapp.R;
+import com.tomaskostadinov.weatherapp.search.SearchSugestionProvider;
 
 /**
- * Created by Tomas on 13.05.2015.
+ * Created by Tomas on 13.05.2015
  */
 public class SettingsActivity extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
@@ -57,6 +59,23 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
             }
         });
         bar.setTitleTextColor(getResources().getColor(R.color.background_floating_material_light));
+
+        final Preference prefHistory = (Preference) findPreference("clearhistory");
+        prefHistory.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            public boolean onPreferenceClick(Preference pref) {
+                SearchRecentSuggestions suggestions = new SearchRecentSuggestions(SettingsActivity.this, SearchSugestionProvider.AUTHORITY, SearchSugestionProvider.MODE);
+                suggestions.clearHistory();
+                return true;
+            }
+        });
+        final Preference prefAbout = (Preference) findPreference("about");
+        prefAbout.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            public boolean onPreferenceClick(Preference pref) {
+                Intent i = new Intent(getApplicationContext(), AboutActivity.class);
+                startActivity(i);
+                return true;
+            }
+        });
         final Preference prefTranslation = (Preference) findPreference("translation");
         prefTranslation.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             public boolean onPreferenceClick(Preference pref) {

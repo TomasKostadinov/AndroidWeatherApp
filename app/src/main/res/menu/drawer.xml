@@ -11,7 +11,7 @@
                     android:icon="@mipmap/ic_launcher"
                     android:title="@string/current"/>
                 <item
-                    android:id="@+id/navigation_item_2"
+                    android:id="@+id/help"
                     android:icon="@drawable/ic_help"
                     android:title="@string/nav_item_help_and_support"/>
             </menu>

@@ -41,6 +41,7 @@
         android:title="@string/notification">
 
         <CheckBoxPreference
+            android:widgetLayout="@layout/l_switch"
             android:title="@string/notification"
             android:summary="@string/nsummary1"
             android:key="notifications"
@@ -62,7 +63,8 @@
     <PreferenceCategory
         android:title="@string/app">
         <Preference
-            android:title="@string/about">
+            android:title="@string/about"
+            android:key="about">
             <intent
                 android:action="android.intent.action.VIEW"
                 android:targetPackage="com.tomaskostadinov.pulse.network"
@@ -74,8 +76,15 @@
             android:key="help"/>
     </PreferenceCategory>
     <PreferenceCategory
+        android:title="@string/app">
+        <Preference
+            android:title="@string/clearHistory"
+            android:key="clearhistory"/>
+    </PreferenceCategory>
+    <PreferenceCategory
         android:title="@string/helpdev">
         <CheckBoxPreference
+            android:widgetLayout="@layout/l_switch"
             android:title="@string/stat"
             android:summary="@string/statsummary"
             android:key="anonymousdata"

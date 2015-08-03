@@ -84,11 +84,6 @@
         </Preference>
         <Preference
             android:title="@string/title_help_and_support">
-            <intent
-                android:action="android.intent.action.VIEW"
-                android:targetPackage="com.tomaskostadinov.weatherapp"
-                android:targetClass="com.tomaskostadinov.weatherapp.activity.AboutActivity"
-                />
         </Preference>
     </PreferenceCategory>
     <PreferenceCategory
@@ -103,12 +98,7 @@
         <Preference
             android:title="@string/translate"
             android:summary="@string/translatesummary">
-            <intent
-                android:action="android.intent.action.VIEW"
-                android:targetPackage="com.tomaskostadinov.weatherapp"
-                android:targetClass="com.tomaskostadinov.weatherapp.activity.AboutActivity"
-                />
         </Preference>
     </PreferenceCategory>
-</PreferenceScreen> 
+</PreferenceScreen>
 

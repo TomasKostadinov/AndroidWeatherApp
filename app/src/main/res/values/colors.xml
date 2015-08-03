@@ -2,14 +2,17 @@
 <resources>
     <!--<color name="colorPrimary">#009687</color>
     <color name="colorPrimaryDark">#005A51</color>-->
-    <color name="colorPrimary">#4C84B6</color>
+    <!--<color name="colorPrimary">#4C84B6</color>
     <color name="colorPrimaryDark">#3D6A92</color>
-    <color name="colorPrimaryLight">#5C98CD</color>
+    <color name="colorPrimaryLight">#5C98CD</color>-->
+    <color name="colorPrimary">#C94C52</color>
+    <color name="colorPrimaryDark">#AB474B</color>
+    <color name="colorPrimaryLight">#D72027</color>
     <color name="textColorPrimary">#FFFFFF</color>
     <color name="windowBackground">#FFFFFF</color>
     <color name="navigationBarColor">#000000</color>
     <color name="colorAccentPrimary">#3498db</color>
-    <color name="colorAccent">#ff6d00</color>
+    <color name="colorAccent">#536DFE</color>
     <color name="cardBackground">#FFFFFF</color>
 
     <color name="card1">#E9B96D</color>
@@ -49,4 +52,6 @@
 
     <color name="translucent_actionbar_background_dark">#33000000</color>
 
+    <color name="primaryText">#212121</color>
+    <color name="secondaryText">#727272</color>
 </resources>

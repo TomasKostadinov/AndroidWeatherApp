@@ -9,7 +9,7 @@ android {
         minSdkVersion 15
         targetSdkVersion 22
         versionCode 1
-        versionName "0.7"
+        versionName "0.7.1"
     }
     buildTypes {
         release {
@@ -24,6 +24,6 @@ dependencies {
     compile 'com.android.support:appcompat-v7:22.+'
     compile 'com.android.support:recyclerview-v7:21.0.+'
     compile 'com.android.support:cardview-v7:21.0.+'
-    compile 'com.android.support:design:22.2.0'
+    compile 'com.android.support:design:22.2.1'
     compile 'com.loopj.android:android-async-http:1.4.6'
 }

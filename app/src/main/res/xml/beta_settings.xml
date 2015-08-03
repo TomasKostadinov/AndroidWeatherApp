@@ -4,13 +4,18 @@
         android:title="@string/notification">
 
         <CheckBoxPreference
+            android:widgetLayout="@layout/l_switch"
             android:title="@string/wearnotification"
             android:summary="@string/nsummary2"
             android:key="wearnotifications"
             android:defaultValue="true"
             />
 
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:title="@string/backgroundprocess">
         <CheckBoxPreference
+            android:widgetLayout="@layout/l_switch"
             android:title="@string/backgroundprocess"
             android:summary="@string/backgroundprocesssumm"
             android:key="bgprocess"
@@ -30,6 +35,7 @@
     <PreferenceCategory
         android:title="@string/cache">
         <CheckBoxPreference
+            android:widgetLayout="@layout/l_switch"
             android:enabled="false"
             android:title="@string/cachetitle"
             android:summary="@string/cachesumm"
@@ -46,6 +52,7 @@
     <PreferenceCategory
         android:title="@string/extended_settings">
         <CheckBoxPreference
+            android:widgetLayout="@layout/l_switch"
             android:title="@string/doubleback"
             android:summary="@string/doublebacksumm"
             android:key="doubleback"

@@ -52,4 +52,6 @@
     <string name="places">Empfohlene Orte</string>
     <string name="forecast">Wettervorhersage</string>
     <string name="current">Aktuelles Wetter</string>
+    <string name="searchhint">Ort suchen...</string>
+    <string name="clearHistory">Suchverlauf löschen</string>
 </resources>

@@ -1,6 +1,8 @@
 package com.tomaskostadinov.weatherapp.helper;
 
 
+import android.text.format.DateUtils;
+
 import com.tomaskostadinov.weatherapp.R;
 
 import org.json.JSONArray;
@@ -228,10 +230,7 @@ public class WeatherHelper {
      * @return SimpleDateFormat
      */
     public String convertTime(Integer Time){
-        Date date = new Date(Time*1000L); // *1000 Convertiert Sekunden in Millisekunden
-        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM, HH:mm:ss"); // Datumsformat
-        //sdf.setTimeZone(TimeZone.getTimeZone("GMT+2")); // Zeitzone
-        formattedDater = sdf.format(date);
+        formattedDater = DateUtils.getRelativeTimeSpanString(Time, System.currentTimeMillis(), 0).toString();
         return formattedDater;
     }
 

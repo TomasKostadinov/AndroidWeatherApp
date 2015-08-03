@@ -582,11 +582,13 @@
     <string name="cachesumm">Saves downloaded data for offline usage</string>
     <string name="share_using">Share with...</string>
     <string name="version">Copyright © 2015 Tomas Kostadinov \nContact: <a href="mailto:tomas.kostadinov@gmx.de">tomas.kostadinov@gmx.de</a>\nLogos © Andreas Kahlöfer</string>
-    <string name="versionDesc" translatable="false">Version 0.7\n</string>
+    <string name="versionDesc" translatable="false">Version 0.7.1\n</string>
     <string name="aroudtheworld" translatable="false">Around the World</string>
     <string name="aroudtheworldsumm">Activate "Around the World"-function</string>
     <string name="places">Recommended Places</string>
     <string name="forecast">Weatherforecast</string>
     <string name="current">Current Weather</string>
+    <string name="searchhint">Search Places...</string>
+    <string name="clearHistory">Clear Search History</string>
 
 </resources>
