@@ -4,35 +4,25 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.app.SearchManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.SearchRecentSuggestions;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
-import android.support.v7.widget.Toolbar;
-import android.text.Html;
-import android.view.LayoutInflater;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
-import android.widget.CheckBox;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -45,18 +35,16 @@ import com.tomaskostadinov.weatherapp.helper.WeatherHelper;
 import com.tomaskostadinov.weatherapp.search.SearchSugestionProvider;
 
 import org.apache.http.Header;
-import org.w3c.dom.Text;
 
 import android.os.Handler;
 import android.widget.Toast;
 
 import java.util.Calendar;
 
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends BaseActivity{
 
-    private Toolbar mToolbar;
-    TextView temp, loc, windspeed, press, hum, suns, sunr, desc, currloc, errorcode;
-    ImageView todayStat;
+    TextView temp, loc, windspeed, press, hum, suns, sunr, desc, errorcode, tomorrow_desc, tomorrow_temp;
+    ImageView todayStat, tomorrowStat;
     ScrollView sv;
     LinearLayout ErrorLayout;
     String city, CountryCode, language, unit;
@@ -65,22 +53,30 @@ public class MainActivity extends AppCompatActivity{
     public  SharedPreferences prefs;
 
     public Integer b = 0;
-    NotificationHelper NotificationHelper;
-    WeatherHelper WeatherHelper;
 
-    public Bundle extras;
-    public DrawerLayout drawerLayout;
-    public NavigationView navview;
     public SwipeRefreshLayout mSwipeRefreshLayout;
-    public CheckBox dontShowAgain;
-    public static final String PREFS_NAME = "updates";
-    public  boolean retried = false, downloadSucessfull = false;
+    public boolean retried = false, downloadSucessfull = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        switch (Integer.parseInt(prefs.getString("theme", "3"))){
+            case 1:
+                Theme = R.style.GreenTheme;
+                break;
+            case 2:
+                Theme = R.style.MyMaterialTheme;
+                break;
+            case 3:
+                Theme = R.style.BlueTheme;
+                break;
+            case 4:
+                Theme = R.style.BlueTheme;
+                break;
+        }
+        setTheme(Theme);
+        setContentView(R.layout.activity_main);
 
         Intent i = getIntent();
 
@@ -90,18 +86,12 @@ public class MainActivity extends AppCompatActivity{
             suggestions.saveRecentQuery(query, null);
             SharedPreferences.Editor editor = prefs.edit();
             editor.putString("location", query);
-            editor.commit();
-            Toast.makeText(this, city, Toast.LENGTH_SHORT).show();
+            editor.apply();
         } else {
             city = prefs.getString("location", "Berlin");
         }
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(mToolbar);
-        //mToolbar.setLogo(R.mipmap.ic_launcher);
-        if (mToolbar != null) {
-            getSupportActionBar().setDisplayShowHomeEnabled(true);
-            mToolbar.setNavigationIcon(R.drawable.ic_menu);
-        }
+
+        setupToolbar();
         /**
          * Helper classes
          */
@@ -121,7 +111,6 @@ public class MainActivity extends AppCompatActivity{
          */
 
         temp = (TextView)findViewById(R.id.t);
-        currloc = (TextView)findViewById(R.id.current_location);
         loc = (TextView)findViewById(R.id.l);
         windspeed = (TextView)findViewById(R.id.windspeed);
         press = (TextView)findViewById(R.id.pressure);
@@ -131,9 +120,11 @@ public class MainActivity extends AppCompatActivity{
         desc = (TextView)findViewById(R.id.desc);
         errorcode = (TextView)findViewById(R.id.errorcode);
         todayStat = (ImageView) findViewById(R.id.stattoday);
-
+        tomorrowStat = (ImageView) findViewById(R.id.tomorrowStat);
+        tomorrow_desc = (TextView)findViewById(R.id.tomorrow_desc);
+        tomorrow_temp = (TextView) findViewById(R.id.tomorrow_temp);
         /**
-         * Removing that ugly overscroll effect
+         * Removing ugly overscroll effect
          * Setting ScrollView's & ErrorLayout's visibility to gone
          */
 
@@ -146,7 +137,6 @@ public class MainActivity extends AppCompatActivity{
          */
 
         getWeatherData(true);
-
         /**
          * [BETA] Starting, if activated, WeatherService to sync the weather data in Background
          * Current Status: Download fails
@@ -163,7 +153,8 @@ public class MainActivity extends AppCompatActivity{
         }
 
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        navview = (NavigationView) findViewById(R.id.navigation_view);
+        navView = (NavigationView) findViewById(R.id.navigation_view);
+        setupNavigationDrawer();
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.activity_main_swipe_refresh_layout);
         mSwipeRefreshLayout.setProgressViewOffset(true, 100, 150);
@@ -183,99 +174,16 @@ public class MainActivity extends AppCompatActivity{
                 retried = false;
             }
         });
-
-        navview.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(MenuItem menuItem) {
-                int id = menuItem.getItemId();
-                switch (id) {
-                    case R.id.home:
-                        drawerLayout.closeDrawer(GravityCompat.START);
-                        return true;
-                    case R.id.place:
-                        drawerLayout.closeDrawer(GravityCompat.START);
-                        new Handler().postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                startActivity(new Intent(getApplicationContext(), PlaceActivity.class));
-                            }
-                        }, 250);
-                        return true;
-                    case R.id.help:
-                        drawerLayout.closeDrawer(GravityCompat.START);
-                        new Handler().postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                Intent i = new Intent(Intent.ACTION_VIEW);
-                                Uri data = Uri.parse("mailto:tomas.kostadinov@gmx.de?subject=I need help with your weather app!");
-                                i.setData(data);
-                                startActivity(i);
-                            }
-                        }, 250);
-                        return true;
-                    case R.id.about:
-                        drawerLayout.closeDrawer(GravityCompat.START);
-                        new Handler().postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                startActivity(new Intent(getApplicationContext(), AboutActivity.class));
-                            }
-                        }, 250);
-                        return true;
-                    case R.id.settings:
-                        drawerLayout.closeDrawer(GravityCompat.START);
-                        new Handler().postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
-                            }
-                        }, 250);
-                        return true;
-                    case R.id.beta:
-                        drawerLayout.closeDrawer(GravityCompat.START);
-                        new Handler().postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                startActivity(new Intent(getApplicationContext(), BetaSettingsActivity.class));
-                            }
-                        }, 250);
-                        return true;
-                    case R.id.tomorrow:
-                        drawerLayout.closeDrawer(GravityCompat.START);
-                        new Handler().postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                startActivity(new Intent(getApplicationContext(), ForecastActivity.class));
-                            }
-                        }, 250);
-                        return true;
-                }
-                return true;
-            }
-        });
-
-        final SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-        if(!settings.getBoolean("updatenews2", false)){
-            AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle);
-            builder.setTitle("Neu in " + getResources().getString(R.string.versionDesc));
-            builder.setMessage(Html.fromHtml(
-            "- Suchen Sie direkt eine Stadt aus dem Startbildschirm heraus<br/>- Sprachsuche<br/>- Vorbereitung auf Wettervorhersage-Funktion <br/>- Design Updates (Vorbereitung auf wählbare Farben)<br/>- Verbesserungen, Bugfixes<br/><br/><b>BITTE ALLE BUGS + FEHLER MELDEN!<br/> FEATURE REQUESTS ERWÜNSCHT!</b>"));
-            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    SharedPreferences.Editor editor = settings.edit();
-                    editor.putBoolean("updatenews2", true);
-                    // Commit the edits!
-                    editor.apply();
-                }
-            });
-            builder.show();
+        SharedPreferences = getSharedPreferences(PREFS_NAME, 0);
+        if(!SharedPreferences.getBoolean("updatenews3", false)){
+            showChangeLog();
         }
+
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        getWeatherData(false);
     }
 
     public void getWeatherData(Boolean notification){
@@ -287,11 +195,12 @@ public class MainActivity extends AppCompatActivity{
         CountryCode = prefs.getString("countrykey", "DE");
         unit = prefs.getString("unitcode", "metric");
         language = prefs.getString("lang", "de");
+
         /**
          * Start JSON data download
          */
         AsyncHttpClient client = new AsyncHttpClient();
-        client.get("http://api.openweathermap.org/data/2.5/weather?q=" + city + "," + CountryCode + "&units=" + unit + "&lang=" + language, new AsyncHttpResponseHandler() {
+        client.get("http://api.openweathermap.org/data/2.5/forecast/daily?q=" + city + "," + CountryCode + "&units=" + unit + "&lang=" + language + "&cnt=3", new AsyncHttpResponseHandler() {
 
             @Override
             public void onStart() {
@@ -300,11 +209,15 @@ public class MainActivity extends AppCompatActivity{
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] response) {
-                // called when response HTTP status is "200 OK"
+                /**
+                 *  called when response HTTP status is "200 OK"
+                 */
                 String in = new String(response);
                 if (in != "") {
                     WeatherHelper.ParseData(in);
+                    Log.i("WeatherData", "WeatherData Parsed");
                     UpdateData(not);
+                    Log.i("WeatherData", "WeatherData Updated");
                     sv.setVisibility(View.VISIBLE);
                     downloadSucessfull = true;
                 } else {
@@ -319,11 +232,11 @@ public class MainActivity extends AppCompatActivity{
                 /**
                  * Called when response HTTP status is "4XX" (eg. 401, 403, 404)
                  * Setting ScrollView's & LoadingLayout's visibility to gone -> displaying the ErrorLayout
-                 * TODO Find a better solution for this
                  */
                 sv.setVisibility(View.GONE);
                 ErrorLayout.setVisibility(View.VISIBLE);
                 currloc.setText("No Internet Connection");
+                Log.e("WeatherData", "Download FAILED");
                 mSwipeRefreshLayout.setRefreshing(false);
                 if (!retried) {
                     new Handler().postDelayed(new Runnable() {
@@ -349,7 +262,6 @@ public class MainActivity extends AppCompatActivity{
 
             @Override
             public void onRetry(int retryNo) {
-                // called when request is retried
                 Toast.makeText(MainActivity.this, "Neuversuch Nr. " + retryNo, Toast.LENGTH_SHORT).show();
             }
         });
@@ -365,14 +277,17 @@ public class MainActivity extends AppCompatActivity{
         desc.setText(WeatherHelper.getDescription());
         windspeed.setText(WeatherHelper.getSpeed().toString() + " km/h");
         hum.setText(WeatherHelper.getHumidity().toString() + "%");
-        press.setText(WeatherHelper.getPressure().toString() + " hPa");
-        Integer t = WeatherHelper.getSunrise();
-        sunr.setText(WeatherHelper.convertTime(t) + " Uhr");
+        press.setText(WeatherHelper.getPressure().toString() + " mBar");
+        tomorrow_temp.setText(String.format("%.1f", WeatherHelper.getTomorrow_temp()) + "°");
+        tomorrow_desc.setText(WeatherHelper.getTomorrow_desc());
+        //Integer t = WeatherHelper.getSunrise();
+        //sunr.setText(WeatherHelper.convertTime(t) + " Uhr");
         //suns.setText(WeatherHelper.convertTime(WeatherHelper.getSunset().toString()) + " Uhr");
         /**
          * Setting Sun/Cloud/... Image from converted weather id
          */
         todayStat.setImageResource(WeatherHelper.convertWeather(WeatherHelper.getWeatherId()));
+        tomorrowStat.setImageResource(WeatherHelper.convertWeather(WeatherHelper.getTomorrowWeatherId()));
         if(notification){
             sendNotification();
         }
@@ -425,7 +340,6 @@ public class MainActivity extends AppCompatActivity{
             searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                 @Override
                 public boolean onQueryTextSubmit(String query) {
-                    Toast.makeText(MainActivity.this, query, Toast.LENGTH_SHORT).show();
                     return false;
                 }
 

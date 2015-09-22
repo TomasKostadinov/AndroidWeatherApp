@@ -6,8 +6,8 @@
         <item name="android:windowAllowReturnTransitionOverlap">true</item>
         <item name="android:windowSharedElementEnterTransition">@android:transition/move</item>
         <item name="android:windowSharedElementExitTransition">@android:transition/move</item>
-        <item name="android:windowTranslucentStatus">true</item>
-        <item name="android:fitsSystemWindows">true</item>
+        <item name="android:colorControlNormal">#fff</item>
+        <item name="android:searchSuggestSelection">#fff</item>
     </style>
 
     <style name="DrawerTheme" parent="MyMaterialTheme.Base">

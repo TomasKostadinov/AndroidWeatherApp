@@ -540,11 +540,37 @@
         <item>Alle 24h</item>
     </string-array>
 
-    <string-array name="updateRateValues">
-        <item>@string/v0</item>
-        <item>@string/v3</item>
-        <item>@string/v6</item>
-        <item>@string/v12</item>
-        <item>@string/v24</item>
+    <integer-array name="updateRateValues">
+        <item>0</item>
+        <item>3</item>
+        <item>6</item>
+        <item>12</item>
+        <item>24</item>
+    </integer-array>
+
+    <string-array name="themes">
+        <item>@string/greentheme</item>
+        <item>@string/redtheme</item>
+        <item>@string/darktheme</item>
+        <item>@string/bluetheme</item>
+    </string-array>
+
+    <string-array name="daycount" translatable="false">
+        <item>3 Tage</item>
+        <item>7 Tage</item>
+        <item>14 Tage</item>
+    </string-array>
+
+    <string-array name="daycountValues" translatable="false">
+        <item>3</item>
+        <item>7</item>
+        <item>14</item>
+    </string-array>
+
+    <string-array name="themeValues" translatable="false">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
     </string-array>
 </resources>

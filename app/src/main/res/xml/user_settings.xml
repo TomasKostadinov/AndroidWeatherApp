@@ -28,6 +28,15 @@
             />
 
         <ListPreference
+            android:entries="@array/daycount"
+            android:entryValues="@array/daycountValues"
+            android:key="days"
+            android:defaultValue="14"
+            android:title="@string/daycounttitle"
+            android:summary=""
+            />
+
+        <ListPreference
             android:entries="@array/languages"
             android:entryValues="@array/languagecodes"
             android:key="lang"
@@ -35,6 +44,7 @@
             android:title="@string/language"
             android:summary=""
             />
+
 
     </PreferenceCategory>
     <PreferenceCategory
@@ -48,6 +58,12 @@
             android:defaultValue="true"
             />
 
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:title="@string/privacy">
+        <Preference
+            android:title="@string/clearHistory"
+            android:key="clearhistory"/>
     </PreferenceCategory>
     <PreferenceCategory
         android:title="Beta">
@@ -74,12 +90,6 @@
         <Preference
             android:title="@string/title_help_and_support"
             android:key="help"/>
-    </PreferenceCategory>
-    <PreferenceCategory
-        android:title="@string/app">
-        <Preference
-            android:title="@string/clearHistory"
-            android:key="clearhistory"/>
     </PreferenceCategory>
     <PreferenceCategory
         android:title="@string/helpdev">

@@ -1,14 +1,22 @@
 package com.tomaskostadinov.weatherapp.helper;
 
 
+import android.content.Intent;
 import android.text.format.DateUtils;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.tomaskostadinov.weatherapp.R;
+import com.tomaskostadinov.weatherapp.activity.MainActivity;
+import com.tomaskostadinov.weatherapp.adapter.ForecastOverviewAdapter;
+import com.tomaskostadinov.weatherapp.model.Day;
+import com.tomaskostadinov.weatherapp.model.Place;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -20,10 +28,14 @@ public class WeatherHelper {
 
     private Double kelvin = 272.15;
     private String city = "lol";
-    private String description, formattedDater;
-    private Integer weatherid,sunrise, sunset, humidity, pressure;
-    private Double temperature_max, speed;
+    private String description, formattedDater, tomorrow_desc;
+    private Integer weatherid, sunrise, sunset, humidity, tomorrowweatherid;
+    private Double temperature_max, speed, pressure, tomorrow_temp;
     private Integer istat = R.drawable.ic_sunny;
+    public ArrayList<Day> items;
+    public ForecastOverviewAdapter adapter;
+
+
 
     public void setCity(String in){
         city = in;
@@ -35,6 +47,10 @@ public class WeatherHelper {
 
     public void setWeatherId(Integer in){
         weatherid = in;
+    }
+
+    public void setTomorrowWeatherId(Integer in){
+        tomorrowweatherid = in;
     }
 
     public void setSunrise(Integer in){
@@ -53,12 +69,20 @@ public class WeatherHelper {
         humidity = in;
     }
 
-    public void setPressure(Integer in){
+    public void setPressure(Double in){
         pressure = in;
     }
 
     public void setSpeed(Double in){
         speed = in;
+    }
+
+    public void setTomorrowTemp(Double in){
+        tomorrow_temp = in;
+    }
+
+    public void setTomorrowDesc(String in){
+        tomorrow_desc = in;
     }
 
     public String getCity(){
@@ -70,6 +94,10 @@ public class WeatherHelper {
 
     public Integer getWeatherId(){
         return weatherid;
+    }
+
+    public Integer getTomorrowWeatherId(){
+        return tomorrowweatherid;
     }
 
     public Integer getSunrise(){
@@ -88,12 +116,20 @@ public class WeatherHelper {
         return humidity;
     }
 
-    public Integer getPressure(){
+    public Double getPressure(){
         return pressure;
     }
 
     public Double getSpeed(){
         return speed;
+    }
+
+    public Double getTomorrow_temp(){
+        return tomorrow_temp;
+    }
+
+    public String getTomorrow_desc(){
+        return tomorrow_desc;
     }
 
     /**
@@ -103,33 +139,66 @@ public class WeatherHelper {
     public void ParseData(String in){
         try {
             JSONObject reader = new JSONObject(in);
-            setCity(reader.getString("name"));
 
-            JSONArray weather  = reader.getJSONArray("weather");
+            JSONObject city = reader.getJSONObject("city");
+            setCity(city.getString("name"));
+
+            JSONArray list = reader.getJSONArray("list");
+            JSONObject JSONList = list.getJSONObject(0);
+
+            JSONArray weather = JSONList.getJSONArray("weather");
             JSONObject JSONWeather = weather.getJSONObject(0);
+
             setDescription(JSONWeather.getString("description"));
             setWeatherId(JSONWeather.getInt("id"));
 
-            JSONObject sys  = reader.getJSONObject("sys");
-            //String country = sys.getString("country");
-            setSunrise(sys.getInt("sunrise"));
-            setSunset(sys.getInt("sunset"));
+            //JSONObject sys = reader.getJSONObject("sys");
+            String country = city.getString("country");
+            //setSunrise(sys.getInt("sunrise"));
+            //setSunset(sys.getInt("sunset"));
 
-            JSONObject main  = reader.getJSONObject("main");
+            JSONObject temp = JSONList.getJSONObject("temp");
             //Integer temperature_min = main.getInt("temp_min");
-            setTemperature_max(main.getDouble("temp_max"));
-            setHumidity(main.getInt("humidity"));
-            setPressure(main.getInt("pressure"));
+            setTemperature_max(temp.getDouble("morn"));
+            setHumidity(JSONList.getInt("humidity"));
+            setPressure(JSONList.getDouble("pressure"));
 
-            JSONObject wind  = reader.getJSONObject("wind");
-            setSpeed(wind.getDouble("speed"));
+            //JSONObject wind = reader.getJSONObject("wind");
+            setSpeed(JSONList.getDouble("speed"));
             //temperature_min =  Math.round(temperature_min) - kelvin;
-            setTemperature_max(temperature_max);// - kelvin);
+            setTemperature_max(temperature_max);
+
+
+            JSONObject tomorrowJSONList = list.getJSONObject(1);
+            JSONObject tomorrowtemp = tomorrowJSONList.getJSONObject("temp");
+            setTomorrowTemp(tomorrowtemp.getDouble("day"));
+            JSONArray tomorrowweather = tomorrowJSONList.getJSONArray("weather");
+            JSONObject tomorrowJSONWeather = tomorrowweather.getJSONObject(0);
+            setTomorrowWeatherId(tomorrowJSONWeather.getInt("id"));
+            setTomorrowDesc(tomorrowJSONWeather.getString("description"));
+
+
+            items = new ArrayList<>();
+            for (int i = 0; i < list.length(); i++) {
+                JSONObject forJSONList = list.getJSONObject(i);
+                JSONArray forWeather = forJSONList.getJSONArray("weather");
+                JSONObject forJSONWeather = forWeather.getJSONObject(0);
+                JSONObject fortemp = forJSONList.getJSONObject("temp");
+                Log.i("RecyclerView", "JSON Parsing Nr." + i);
+                items.add(new Day(forJSONList.getInt("dt"), fortemp.getDouble("max"), fortemp.getDouble("min"), forJSONList.getDouble("pressure"), forJSONList.getInt("humidity"), forJSONWeather.getInt("id"), forJSONWeather.getString("description"), forJSONList.getDouble("speed")));
+                Log.i("RecyclerView", "Added items Nr" + i);
+                adapter.notifyItemInserted(0);
+                Log.i("RecyclerView", "notifyItemInserted Nr." + i);
+            }
         } catch (Exception e) {
             e.printStackTrace();
+            Log.e("JSON Parsing", e.toString());
         }
     }
 
+    public ArrayList<Day> getDays() {
+        return items;
+    }
     /**
      *
      * @param ID the weather id

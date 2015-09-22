@@ -49,7 +49,8 @@ public class BetaSettingsActivity extends PreferenceActivity implements SharedPr
                 finish();
             }
         });
-        bar.setTitle(getResources().getString(R.string.extended_settings));
+        bar.setTitleTextColor(getResources().getColor(R.color.background_floating_material_light));
+        bar.setTitle(getResources().getString(R.string.beta_settings));
 
     }
     @Override

@@ -590,5 +590,14 @@
     <string name="current">Current Weather</string>
     <string name="searchhint">Search Places...</string>
     <string name="clearHistory">Clear Search History</string>
+    <string name="tomorrow">Tomorrow</string>
+    <string name="privacy">Privacy settings</string>
+    <string name="dailyforecast">Daily Forecast</string>
+    <string name="greentheme">Green Theme</string>
+    <string name="bluetheme">Blue Theme</string>
+    <string name="darktheme">Dark Theme</string>
+    <string name="redtheme">Red Theme</string>
+    <string name="daycounttitle">Days shown</string>
+    <string name="daycountdesc">Select how many days are shown in forecast view</string>
 
 </resources>

@@ -54,4 +54,13 @@
     <string name="current">Aktuelles Wetter</string>
     <string name="searchhint">Ort suchen...</string>
     <string name="clearHistory">Suchverlauf löschen</string>
+    <string name="tomorrow">Morgen</string>
+    <string name="privacy">Privatsphäre Einstellungen</string>
+    <string name="dailyforecast">Tägliche Wettervorhersage</string>
+    <string name="greentheme">Grünes Theme</string>
+    <string name="bluetheme">Blaues Theme</string>
+    <string name="darktheme">Dunkles Theme</string>
+    <string name="redtheme">Rotes Theme</string>
+    <string name="daycounttitle">Anzahl Wettervorhersage Tage</string>
+    <string name="daycountdesc">Auswählen, wie viele Tage für die Wettervorhersage angezeigt werden sollen. </string>
 </resources>

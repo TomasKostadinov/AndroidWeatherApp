@@ -11,6 +11,10 @@
                     android:icon="@mipmap/ic_launcher"
                     android:title="@string/current"/>
                 <item
+                    android:id="@+id/place"
+                    android:icon="@drawable/ic_temperature"
+                    android:title="@string/dailyforecast"/>
+                <item
                     android:id="@+id/help"
                     android:icon="@drawable/ic_help"
                     android:title="@string/nav_item_help_and_support"/>
@@ -34,10 +38,6 @@
         android:id="@+id/navigation_betaheader"
         android:title="Beta">
         <menu>
-            <item
-                android:id="@+id/place"
-                android:icon="@drawable/ic_place"
-                android:title="@string/places"/>
             <item
                 android:id="@+id/tomorrow"
                 android:icon="@mipmap/ic_launcher"

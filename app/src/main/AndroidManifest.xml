@@ -9,8 +9,9 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/MyMaterialTheme" >
+        android:theme="@style/MyMaterialTheme">
         <activity
+            android:theme="@style/DrawerTheme"
             android:name=".activity.MainActivity"
             android:label="@string/app_name"
             android:configChanges="orientation"
@@ -40,7 +41,6 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:host="wetter.com" android:scheme="http" />
             </intent-filter>
-
             <meta-data
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
@@ -76,8 +76,8 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".activity.PlaceActivity"
-            android:label="@string/places"
+            android:name=".activity.DailyForecastActivity"
+            android:label="@string/dailyforecast"
             android:configChanges="orientation"
             android:screenOrientation="portrait" >
         </activity>

@@ -1,5 +1,22 @@
 <resources>
 
+    <style name="GreenTheme" parent="MyMaterialTheme.Base">
+        <item name="colorPrimary">@color/greenColorPrimary</item>
+        <item name="colorPrimaryDark">@color/greenColorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+    <style name="DarkBlueTheme" parent="MyMaterialTheme.Base">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+    <style name="BlueTheme" parent="MyMaterialTheme.Base">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+    <style name="DrawerTheme" parent="MyMaterialTheme.Base">
+    </style>
     <style name="MyMaterialTheme" parent="MyMaterialTheme.Base">
     </style>
     <!--<style name="MyMaterialTheme.Base" parent="Theme.AppCompat.Light.NoActionBar">-->

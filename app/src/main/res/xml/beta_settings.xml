@@ -59,4 +59,16 @@
             android:defaultValue="true"
             />
     </PreferenceCategory>
+    <PreferenceCategory
+        android:title="Theme">
+        <ListPreference
+            android:entries="@array/themes"
+            android:entryValues="@array/themeValues"
+            android:key="theme"
+            android:defaultValue="2"
+            android:title="Chose Your Theme"
+            android:summary="3"
+            />
+
+    </PreferenceCategory>
 </PreferenceScreen>
