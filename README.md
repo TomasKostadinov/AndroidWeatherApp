@@ -2,11 +2,8 @@
 Android WeatherApp, using the http://openweathermap.org/ API. Made for Network + JSON Parsing and Material Design Experiments.
 
 ## Screenshots
-<img src="http://i.imgur.com/TRnyKNs.jpg" alt="Drawing" size="100px;"/>
-<img src="http://i.imgur.com/8kc47ay.jpg" alt="Drawing" size="100px;"/>
-<img src="http://i.imgur.com/QiM6q3w.jpg" alt="Drawing" size="100px;"/>
-<img src="http://i.imgur.com/PsunCf4.jpg" alt="Drawing" size="100px;"/>
-
+<img src="http://i.imgur.com/rRfg6b7.jpg" alt="Screenshot"/>
+The Material Design Weather App.
 ## License
 
 ##### Copyright 2015 Tomas Kostadinov
