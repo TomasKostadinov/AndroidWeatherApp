@@ -25,15 +25,21 @@
         android:title="@string/action_settings">
         <menu>
             <item
-                android:id="@+id/about"
-                android:icon="@drawable/ic_info"
-                android:title="@string/about"/>
-            <item
                 android:id="@+id/settings"
                 android:icon="@drawable/ic_settings"
                 android:title="@string/action_settings"/>
+            <item
+                android:id="@+id/about"
+                android:icon="@drawable/ic_info"
+                android:title="@string/about"/>
         </menu>
     </item>
+    <menu>
+        <item
+            android:id="@+id/changelog"
+            android:icon="@drawable/ic_info"
+            android:title="@string/changelog"/>
+    </menu><!--
     <item
         android:id="@+id/navigation_betaheader"
         android:title="Beta">
@@ -47,6 +53,6 @@
                 android:icon="@drawable/ic_error"
                 android:title="@string/beta_settings"/>
         </menu>
-    </item>
+    </item>-->
 </group>
 </menu>

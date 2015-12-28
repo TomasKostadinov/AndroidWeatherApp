@@ -22,16 +22,26 @@ import com.tomaskostadinov.weatherapp.helper.NotificationHelper;
 import com.tomaskostadinov.weatherapp.helper.WeatherHelper;
 
 /**
- * Created by Tomas on 08.08.2015
+ * Created by Tomas Kostadinov on 08.08.2015
  * BaseActivity extends AppCompatActivity
+ * Use BaseActivity always when accessing API Data from Remote Server
  */
 public class BaseActivity extends AppCompatActivity {
 
+
+    // ==============================================
+    /**
+     * IMPOERTANT: ADD YOUR OPENWEATHERMAPS API KEY HERE
+     */
+    public String ApiKey = "KEY";
+
+    // ==============================================
     public Toolbar mToolbar;
     public TextView currloc;
     public DrawerLayout drawerLayout;
     public NavigationView navView;
     public static final String PREFS_NAME = "weatherapp";
+
     public AlertDialog.Builder changelog;
     public SharedPreferences SharedPreferences;
     public NotificationHelper NotificationHelper;
@@ -135,7 +145,7 @@ public class BaseActivity extends AppCompatActivity {
                                 startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
                             }
                         }, 250);
-                        return true;
+                        return true;/*
                     case R.id.beta:
                         drawerLayout.closeDrawer(GravityCompat.START);
                         new Handler().postDelayed(new Runnable() {
@@ -152,6 +162,14 @@ public class BaseActivity extends AppCompatActivity {
                             public void run() {
                                 startActivity(new Intent(getApplicationContext(), ForecastActivity.class));
                             }
+                        }, 250);*/
+                    case R.id.changelog:
+                        drawerLayout.closeDrawer(GravityCompat.START);
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                showChangeLog();
+                            }
                         }, 250);
                         return true;
                 }
@@ -164,14 +182,14 @@ public class BaseActivity extends AppCompatActivity {
         changelog = new AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle);
         changelog.setTitle("Neu in " + getResources().getString(R.string.versionDesc));
         changelog.setMessage(Html.fromHtml(
-                "- 14 Tage Wettervorhersage<br/>" +
-                "- Design Updates (Vorbereitung auf wählbare Farben)<br/>" +
-                "- Verbesserungen, Bugfixes<br/><br/>" +
-                "<b>BITTE ALLE BUGS + FEHLER MELDEN!<br/> FEATURE REQUESTS ERWÜNSCHT!</b>"));
+                "- Wöchentliche Vorschau redesignt<br/>" +
+                "- Home Screen: Farbe ändert sich mit Wetter<br/>" +
+                "- Kleine Verbesserungen, Bugfixes<br/><br/>" +
+                "<b>Bitte alle Bugs + Fehler melden!<br/> Feature Requests sind erwünscht!</b>"));
         changelog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 SharedPreferences.Editor editor = SharedPreferences.edit();
-                editor.putBoolean("updatenews3", true);
+                editor.putBoolean("updatenews4", true);
                 editor.apply();
             }
         });

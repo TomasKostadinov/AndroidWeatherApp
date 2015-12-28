@@ -14,6 +14,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.Menu;
@@ -21,10 +22,18 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+
+import org.apache.http.Header;
+
+import android.os.Handler;
+import android.widget.Toast;
+
+import java.util.Calendar;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -34,13 +43,6 @@ import com.tomaskostadinov.weatherapp.helper.NotificationHelper;
 import com.tomaskostadinov.weatherapp.helper.WeatherHelper;
 import com.tomaskostadinov.weatherapp.search.SearchSugestionProvider;
 
-import org.apache.http.Header;
-
-import android.os.Handler;
-import android.widget.Toast;
-
-import java.util.Calendar;
-
 public class MainActivity extends BaseActivity{
 
     TextView temp, loc, windspeed, press, hum, suns, sunr, desc, errorcode, tomorrow_desc, tomorrow_temp;
@@ -48,12 +50,12 @@ public class MainActivity extends BaseActivity{
     ScrollView sv;
     LinearLayout ErrorLayout;
     String city, CountryCode, language, unit;
+    CardView card, card_tomorrow;
 
     private Handler mHandler = new Handler();
     public  SharedPreferences prefs;
 
     public Integer b = 0;
-
     public SwipeRefreshLayout mSwipeRefreshLayout;
     public boolean retried = false, downloadSucessfull = false;
 
@@ -115,14 +117,15 @@ public class MainActivity extends BaseActivity{
         windspeed = (TextView)findViewById(R.id.windspeed);
         press = (TextView)findViewById(R.id.pressure);
         hum = (TextView)findViewById(R.id.humidity);
-        sunr = (TextView)findViewById(R.id.sunrise);
-        suns = (TextView)findViewById(R.id.sunset);
         desc = (TextView)findViewById(R.id.desc);
         errorcode = (TextView)findViewById(R.id.errorcode);
         todayStat = (ImageView) findViewById(R.id.stattoday);
         tomorrowStat = (ImageView) findViewById(R.id.tomorrowStat);
         tomorrow_desc = (TextView)findViewById(R.id.tomorrow_desc);
         tomorrow_temp = (TextView) findViewById(R.id.tomorrow_temp);
+        currloc = (TextView) findViewById(R.id.current_location);
+        card = (CardView) findViewById(R.id.card_view);
+        card_tomorrow = (CardView) findViewById(R.id.card_tomorrow);
         /**
          * Removing ugly overscroll effect
          * Setting ScrollView's & ErrorLayout's visibility to gone
@@ -175,10 +178,18 @@ public class MainActivity extends BaseActivity{
             }
         });
         SharedPreferences = getSharedPreferences(PREFS_NAME, 0);
-        if(!SharedPreferences.getBoolean("updatenews3", false)){
+        if(!SharedPreferences.getBoolean("updatenews4", false)){
             showChangeLog();
         }
 
+    }
+
+    public void launchDetails(View v) {
+        switch (v.getId()) {
+            case R.id.viewmorebtn:
+                startActivity(new Intent(this, DailyForecastActivity.class));
+                break;
+        }
     }
 
     @Override
@@ -200,7 +211,7 @@ public class MainActivity extends BaseActivity{
          * Start JSON data download
          */
         AsyncHttpClient client = new AsyncHttpClient();
-        client.get("http://api.openweathermap.org/data/2.5/forecast/daily?q=" + city + "," + CountryCode + "&units=" + unit + "&lang=" + language + "&cnt=3", new AsyncHttpResponseHandler() {
+        client.get("http://api.openweathermap.org/data/2.5/forecast/daily?q=" + city + "," + CountryCode + "&units=" + unit + "&lang=" + language + "&cnt=3&APPID=" + ApiKey, new AsyncHttpResponseHandler() {
 
             @Override
             public void onStart() {
@@ -235,7 +246,7 @@ public class MainActivity extends BaseActivity{
                  */
                 sv.setVisibility(View.GONE);
                 ErrorLayout.setVisibility(View.VISIBLE);
-                currloc.setText("No Internet Connection");
+                //currloc.setText("No Internet Connection");
                 Log.e("WeatherData", "Download FAILED");
                 mSwipeRefreshLayout.setRefreshing(false);
                 if (!retried) {
@@ -272,7 +283,6 @@ public class MainActivity extends BaseActivity{
          * Writing data to TextView
          */
         loc.setText(WeatherHelper.getCity());
-        currloc.setText(WeatherHelper.getCity());
         temp.setText(String.format("%.1f", WeatherHelper.getTemperature_max()) + "°");
         desc.setText(WeatherHelper.getDescription());
         windspeed.setText(WeatherHelper.getSpeed().toString() + " km/h");
@@ -286,6 +296,8 @@ public class MainActivity extends BaseActivity{
         /**
          * Setting Sun/Cloud/... Image from converted weather id
          */
+        card.setCardBackgroundColor(getResources().getColor(WeatherHelper.convertWeatherToColor(WeatherHelper.getWeatherId())));
+        card_tomorrow.setCardBackgroundColor(getResources().getColor(WeatherHelper.convertWeatherToColor(WeatherHelper.getTomorrowWeatherId())));
         todayStat.setImageResource(WeatherHelper.convertWeather(WeatherHelper.getWeatherId()));
         tomorrowStat.setImageResource(WeatherHelper.convertWeather(WeatherHelper.getTomorrowWeatherId()));
         if(notification){

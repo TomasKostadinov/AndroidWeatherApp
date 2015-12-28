@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+    android:background="#E8E8E8"
     tools:context=".DailyForecastActivity">   <!-- AppBarLayout allows your Toolbar and other views (such as tabs provided by TabLayout)
     to react to scroll events in a sibling view marked with a ScrollingViewBehavior.-->
     <!--<android.support.design.widget.AppBarLayout

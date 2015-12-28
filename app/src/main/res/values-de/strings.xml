@@ -63,4 +63,5 @@
     <string name="redtheme">Rotes Theme</string>
     <string name="daycounttitle">Anzahl Wettervorhersage Tage</string>
     <string name="daycountdesc">Auswählen, wie viele Tage für die Wettervorhersage angezeigt werden sollen. </string>
+    <string name="aroudtheworld" translatable="false">Um die Welt</string>
 </resources>

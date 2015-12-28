@@ -14,5 +14,6 @@
         android:layout_gravity="bottom"
         android:layout_margin="16dp"
         android:id="@+id/current_location"
+        android:text="Android Weather App by Tomas Kostadinov"
         android:textColor="@android:color/white" />
 </FrameLayout>

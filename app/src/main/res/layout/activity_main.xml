@@ -4,7 +4,7 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_floating_material_light"
+    android:background="#E8E8E8"
     tools:context=".MainActivity"
     android:fitsSystemWindows="true">
 
@@ -52,14 +52,18 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <LinearLayout
+                    <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
                         android:id="@+id/card_view"
-                        android:layout_marginTop="0dp"
-                        android:layout_marginLeft="0dp"
-                        android:layout_marginRight="0dp"
+                        android:layout_margin="12dp"
+                        android:elevation="8dp"
+                        android:layout_marginBottom="8dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@color/colorPrimary">
+                        card_view:cardBackgroundColor="@color/colorPrimary">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
                         <LinearLayout
                             android:padding="8dp"
                             android:paddingBottom="10dp"
@@ -127,74 +131,16 @@
 
                             </LinearLayout>
                         </LinearLayout>
-                    </LinearLayout><!--
-                    <HorizontalScrollView
-                        android:background="@color/background_floating_material_light"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
-
                         <LinearLayout
-                            android:background="@color/textColorPrimary"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:weightSum="100">
-
-                            <LinearLayout
-                                android:layout_margin="10dp"
-                                android:layout_weight="15"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical">
-                                <ImageView
-                                    android:maxWidth="20dp"
-                                    android:scaleType="fitCenter"
-                                    android:adjustViewBounds="true"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:src="@drawable/ic_wind"/>
-                                <TextView
-                                    android:textSize="18sp"
-                                    android:layout_width="fill_parent"
-                                    android:layout_height="wrap_content"
-                                    android:gravity="center_horizontal"
-                                    android:text="14*"/>
-                            </LinearLayout>
-
-                            <Button
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Button2" />
-
-                            <Button
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Button3" />
-
-                            <Button
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Button4" />
-
-                        </LinearLayout>
-                    </HorizontalScrollView>
-
-                    <android.support.v7.widget.RecyclerView
-                        android:id="@+id/rvForecastOverview"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />-->
-                    <LinearLayout
-                        android:id="@+id/card"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-                        <android.support.v7.widget.CardView
-                            android:padding="12dp"
-                            android:layout_margin="12dp"
+                            android:padding="8dp"
+                            android:paddingBottom="10dp"
+                            android:paddingTop="10dp"
+                            android:orientation="vertical"
+                            android:background="#fff"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent">
                             <LinearLayout
-                                android:padding="12dp"
-                                android:layout_width="match_parent"
+                                android:layout_width="330dp"
                                 android:layout_height="match_parent"
                                 android:orientation="vertical">
                                 <TextView
@@ -274,75 +220,85 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"/>
 
-                                <TextView
-                                    android:id="@+id/borderline2"
-                                    android:paddingTop="4dp"
-                                    android:textSize="1sp"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:background="@drawable/border_text"/>
-
-                                <TextView
-                                    android:id="@+id/sunriseTitle"
-                                    android:paddingLeft="8dp"
-                                    android:paddingRight="8dp"
-                                    android:paddingTop="4dp"
-                                    android:paddingBottom="1dp"
-                                    android:text="@string/sunrise"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"/>
-
-                                <TextView
-                                    android:textSize="@dimen/text_size_xlarge"
-                                    android:textColor="@color/body_text_1"
-                                    android:id="@+id/sunrise"
-                                    android:paddingLeft="8dp"
-                                    android:paddingRight="8dp"
-                                    android:paddingTop="4dp"
-                                    android:paddingBottom="4dp"
-                                    android:text="keine Angabe"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"/>
-
-                                <TextView
-                                    android:id="@+id/borderline3"
-                                    android:paddingTop="4dp"
-                                    android:textSize="1sp"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:background="@drawable/border_text"/>
-
-                                <TextView
-                                    android:id="@+id/sunsetTitle"
-                                    android:layout_width="fill_parent"
-                                    android:layout_height="wrap_content"
-                                    android:paddingLeft="8dp"
-                                    android:paddingRight="8dp"
-                                    android:paddingTop="4dp"
-                                    android:paddingBottom="1dp"
-                                    android:text="@string/sunset" />
-
-                                <TextView
-                                    android:textSize="@dimen/text_size_xlarge"
-                                    android:textColor="@color/body_text_1"
-                                    android:id="@+id/sunset"
-                                    android:layout_width="fill_parent"
-                                    android:layout_height="wrap_content"
-                                    android:paddingLeft="8dp"
-                                    android:paddingRight="8dp"
-                                    android:paddingTop="1dp"
-                                    android:text="keine Angabe"
-                                    android:paddingBottom="4dp"/>
-
                             </LinearLayout>
-                        </android.support.v7.widget.CardView>
+                        </LinearLayout>
                     </LinearLayout>
-                    <LinearLayout
-                        android:background="@color/colorPrimary"
-                        android:id="@+id/forecast"
-                        android:layout_marginTop="16dp"
-                        android:layout_width="match_parent"
+                    </android.support.v7.widget.CardView><!--
+                    <HorizontalScrollView
+                        android:background="@color/background_floating_material_light"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content">
+
+                        <LinearLayout
+                            android:background="@color/textColorPrimary"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:weightSum="100">
+
+                            <LinearLayout
+                                android:layout_margin="10dp"
+                                android:layout_weight="15"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+                                <ImageView
+                                    android:maxWidth="20dp"
+                                    android:scaleType="fitCenter"
+                                    android:adjustViewBounds="true"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:src="@drawable/ic_wind"/>
+                                <TextView
+                                    android:textSize="18sp"
+                                    android:layout_width="fill_parent"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center_horizontal"
+                                    android:text="14*"/>
+                            </LinearLayout>
+
+                            <Button
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Button2" />
+
+                            <Button
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Button3" />
+
+                            <Button
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Button4" />
+
+                        </LinearLayout>
+                    </HorizontalScrollView>
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/rvForecastOverview"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />-->
+                    <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                        android:id="@+id/card_tomorrow"
+                        android:layout_margin="12dp"
+                        android:elevation="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        card_view:cardBackgroundColor="@color/colorPrimary">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+                        <LinearLayout
+                            android:padding="8dp"
+                            android:paddingBottom="10dp"
+                            android:paddingTop="10dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginBottom="8dp"
+                            android:orientation="vertical">
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
@@ -417,7 +373,22 @@
                                 </LinearLayout>
                             </LinearLayout>
                         </LinearLayout>
+                        </LinearLayout>
+                        <LinearLayout
+                            android:background="#fff"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
+                            <Button
+                                android:id="@+id/viewmorebtn"
+                                android:onClick="launchDetails"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Detailiert Ansehen" android:theme="@style/MyButton"
+                                style="@style/Widget.AppCompat.Button.Borderless"/>
+                        </LinearLayout>
                     </LinearLayout>
+                    </android.support.v7.widget.CardView>
                 </LinearLayout>
             </ScrollView>
             <LinearLayout

@@ -5,20 +5,22 @@
         <item name="colorPrimaryDark">@color/greenColorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
+
     <style name="DarkBlueTheme" parent="MyMaterialTheme.Base">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
+
     <style name="BlueTheme" parent="MyMaterialTheme.Base">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
-    <style name="DrawerTheme" parent="MyMaterialTheme.Base">
-    </style>
-    <style name="MyMaterialTheme" parent="MyMaterialTheme.Base">
-    </style>
+
+    <style name="DrawerTheme" parent="MyMaterialTheme.Base"></style>
+
+    <style name="MyMaterialTheme" parent="MyMaterialTheme.Base"></style>
     <!--<style name="MyMaterialTheme.Base" parent="Theme.AppCompat.Light.NoActionBar">-->
     <style name="MyMaterialTheme.Base" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="windowActionBar">false</item>
@@ -27,10 +29,12 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
+
     <style name="AppCompatAlertDialogStyle" parent="Theme.AppCompat.Light.Dialog.Alert">
         <item name="colorAccent">#fff</item>
         <item name="android:textColorPrimary">#FFFFFF</item>
-        <item name="android:background">@color/colorPrimary</item><!--#5fa3d0-->
+        <item name="android:background">@color/colorPrimary</item>
+        <!--#5fa3d0-->
     </style>
 
     <style name="Base.Theme.DesignDemo" parent="Theme.AppCompat.NoActionBar">
@@ -47,4 +51,12 @@
         <item name="android:paddingBottom">24dp</item>
         <item name="android:orientation">vertical</item>
     </style>
+
+    <style name="MyButton" parent="Theme.AppCompat.Light">
+        <item name="colorControlHighlight">@color/theme_accent_2</item>
+    </style>
+
+    <style name="MyMaterialTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="MyMaterialTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>

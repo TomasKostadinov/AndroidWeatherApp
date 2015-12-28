@@ -1,6 +1,8 @@
 package com.tomaskostadinov.weatherapp.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
 import android.util.Log;
@@ -12,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.tomaskostadinov.weatherapp.R;
+import com.tomaskostadinov.weatherapp.activity.ScrollingActivity;
 import com.tomaskostadinov.weatherapp.helper.WeatherHelper;
 import com.tomaskostadinov.weatherapp.model.Day;
 import com.tomaskostadinov.weatherapp.model.Place;
@@ -21,7 +24,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 /**
- * Created by Tomas on 02.08.2015.
+ * Created by Tomas on 02.08.2015
  */
 // Create the basic adapter extending from RecyclerView.Adapter
 // Note that we specify the custom ViewHolder which gives us access to our views
@@ -37,6 +40,7 @@ public class ForecastOverviewAdapter extends RecyclerView.Adapter<ForecastOvervi
         public TextView tvTemperature;
         public TextView tvMaxTemp, tvMinTemp;
         public ImageView ivWeatheric;
+        public CardView cvCard;
         // We also create a constructor that accepts the entire item row
         // and does the view lookups to find each subview
         public ViewHolder(View itemView) {
@@ -45,6 +49,7 @@ public class ForecastOverviewAdapter extends RecyclerView.Adapter<ForecastOvervi
             this.tvDescription = (TextView) itemView.findViewById(R.id.tvHome);
             this.tvTemperature = (TextView) itemView.findViewById(R.id.genre);
             this.ivWeatheric = (ImageView) itemView.findViewById(R.id.Stat);
+            this.cvCard = (CardView) itemView.findViewById(R.id.daycard);
         }
     }
 
@@ -62,7 +67,7 @@ public class ForecastOverviewAdapter extends RecyclerView.Adapter<ForecastOvervi
     public ForecastOverviewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // Inflate the custom layout
         final View itemView = LayoutInflater.from(context).inflate(R.layout.daycard, parent, false);
-        //itemView.setOnClickListener(mCLick());
+        itemView.setOnClickListener(this);
         // Return a new holder instance
         return new ForecastOverviewAdapter.ViewHolder(itemView);
     }
@@ -82,8 +87,10 @@ public class ForecastOverviewAdapter extends RecyclerView.Adapter<ForecastOvervi
         holder.tvDayName.setText(sdf.format(time));
         holder.tvDescription.setText(songs.description);
         String temp =  String.format("%.1f", songs.max_temp);
-        holder.tvTemperature.setText( temp + "°");
+        holder.tvTemperature.setText(temp + "°");
         holder.ivWeatheric.setImageResource(weatherHelper.convertWeather(songs.weatherid));
+
+        holder.cvCard.setCardBackgroundColor(context.getResources().getColor(WeatherHelper.convertWeatherToColor(songs.weatherid)));
     }
 
     // Return the total count of items
@@ -95,6 +102,11 @@ public class ForecastOverviewAdapter extends RecyclerView.Adapter<ForecastOvervi
     @Override
     public void onClick(View v){
         Log.i("onClick", "on View: " + v.toString());
+
+        Intent i = new Intent(context.getApplicationContext(), ScrollingActivity.class);
+        Integer id = 1;
+        i.putExtra("id", id);
+        //context.startActivity(i);
     }
 }
 

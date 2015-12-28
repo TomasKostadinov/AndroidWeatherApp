@@ -1,8 +1,6 @@
 package com.tomaskostadinov.weatherapp.activity;
 
 import android.os.Bundle;
-import android.support.design.widget.NavigationView;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -14,7 +12,7 @@ import com.tomaskostadinov.weatherapp.R;
 import com.tomaskostadinov.weatherapp.adapter.ForecastOverviewAdapter;
 import com.tomaskostadinov.weatherapp.model.Day;
 
-import org.apache.http.Header;
+import org.apache.http.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -41,7 +39,7 @@ public class DailyForecastActivity extends BaseActivity {
         downloadJSON();
 
         RecyclerView rvUsers = (RecyclerView) findViewById(R.id.rvUsers);
-        adapter = new ForecastOverviewAdapter(this, getDays());
+        adapter = new   ForecastOverviewAdapter(this, getDays());
         rvUsers.setAdapter(adapter);
         rvUsers.setLayoutManager(new LinearLayoutManager(this));
     }
@@ -62,7 +60,7 @@ public class DailyForecastActivity extends BaseActivity {
          * Start JSON data download
          */
         AsyncHttpClient client = new AsyncHttpClient();
-        client.get("http://api.openweathermap.org/data/2.5/forecast/daily?q=" + city + "," + CountryCode + "&units=" + unit + "&lang=" + language + "&cnt=" + SharedPreferences.getString("days", "14"), new AsyncHttpResponseHandler() {
+        client.get("http://api.openweathermap.org/data/2.5/forecast/daily?q=" + city + "," + CountryCode + "&units=" + unit + "&lang=" + language + "&cnt=" + SharedPreferences.getString("days", "14") + "&APPID=" + ApiKey, new AsyncHttpResponseHandler() {
 
             @Override
             public void onStart() {

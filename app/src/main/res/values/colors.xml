@@ -6,8 +6,10 @@
     <color name="blueColorPrimaryDark">#3D6A92</color>
     <!--<color name="colorPrimary">#2C333D</color>-->
     <color name="darkColorPrimaryDark">#3D6A92</color>
+    <color name="colorPrimary">#607D8B</color>
+    <color name="colorPrimaryDark">#455A64</color><!--
     <color name="colorPrimary">#C94C52</color>
-    <color name="colorPrimaryDark">#AB474B</color>
+    <color name="colorPrimaryDark">#AB474B</color>-->
     <color name="colorPrimaryLight">#D72027</color>
     <color name="textColorPrimary">#FFFFFF</color>
     <color name="windowBackground">#FFFFFF</color>
@@ -55,4 +57,17 @@
 
     <color name="primaryText">#212121</color>
     <color name="secondaryText">#727272</color>
+
+
+
+    <!-- Weather Colors -->
+
+
+    <color name="goodWeather">#2196f3</color>
+    <color name="rainyWeather">#78909C</color>
+    <color name="sunnyWeather">#FFB300</color>
+    <color name="warningWeather">#ff1744</color>
+    <color name="badWeather">#455A64</color>
+
+
 </resources>

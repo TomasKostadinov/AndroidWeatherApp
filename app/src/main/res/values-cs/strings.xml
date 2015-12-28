@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Předpověď počasí</string>
+    <string name="about">O aplikaci</string>
+    <string name="action_exit">Ukončit aplikaci</string>
+    <string name="action_settings">Nastavení</string>
+    <string name="back">Stiskněte opět klávesu back pro ukončení</string>
+    <string name="backgroundprocesssumm">Synchronizace dat na pozadí</string>
+    <string name="beta_settings">Beta Nastavení</string>
+    <string name="bluetheme">Modrý motiv</string>
+    <string name="cache">Cache</string>
+    <string name="cachesumm">Uložení stažených dat pro použítí offline</string>
+    <string name="cachetitle">Activace Cachingu</string>
+    <string name="city">Město</string>
+    <string name="clearHistory">Vymazání historie vyhledávání</string>
+    <string name="close">Uzavřít</string>
+    <string name="country">Země</string>
+    <string name="current">Aktuální počasí</string>
+    <string name="dailyforecast">Denní předpověď</string>
+    <string name="darktheme">Tmavý motiv</string>
+    <string name="daycountdesc">Vyberte, kolik dní jsou zobrazeny v předpovědi</string>
+    <string name="daycounttitle">Zobrazení dnů</string>
+    <string name="doubleback">Dvojitý stisk klávesy back</string>
+    <string name="doublebacksumm">Ukončení aplikace pouze dvojitým stitskem klávesy back</string>
+    <string name="drawer_open">Otevřít</string>
+    <string name="extended_settings">Další nastavení</string>
+    <string name="forecast">Předpovď počasí</string>
+    <string name="greentheme">Zelený motiv</string>
+    <string name="helpdev">Pomozte nám</string>
+    <string name="humidity">Vlhkost</string>
+    <string name="language">Jazyk</string>
+    <string name="license">Software licence</string>
+    <string name="main">Hlavní</string>
+    <string name="nav_item_help_and_support"><![CDATA[Pomoc & Podpora]]></string>
+    <string name="nav_item_settings">Nastavení</string>
+    <string name="nav_item_weather">Počasí</string>
+    <string name="notification">Upozornění</string>
+    <string name="nsummary1">Zobrazit aktuální počasí jako upozornění</string>
+    <string name="places">Doporučená místa</string>
+    <string name="pressure">Tlak</string>
+    <string name="privacy">Nastavení ochrany osobních údajů</string>
+    <string name="redtheme">Červený motiv</string>
+    <string name="refresh">Obnovení</string>
+    <string name="sunrise">Východ slunce</string>
+    <string name="sunset">Západ slunce</string>
+    <string name="title_settings">Nastavení</string>
+    <string name="tomorrow">Zítra</string>
+    <string name="translate">Přložte tuto app.</string>
+    <string name="translatesummary">Pomozte nám s přeložením app</string>
+    <string name="windspeed">Síla větru</string>
+    <string name="updaterate">Interval aktualizace</string>
+    <string name="unknown_error">Vyskytla se chyba:</string>
+    <string name="unit">Jednotky</string>
+    <string name="searchhint">Hledání místa...</string>
+    <string name="share_using">Sdílení s...</string>
+    <string name="stat">Anonymní statistika</string>
+    <string name="statsummary">Odeslat anonymní statistiky používání autorovi</string>
+    <string name="version">Copyright © 2015 Tomas Kostadinov \nContact: <a href="mailto:tomas.kostadinov@gmx.de">tomas.kostadinov@gmx.de</a>\nLogos © Andreas Kahlöfer</string>
+    <string name="aroudtheworld" translatable="false">Okolo světa</string>
+    <string name="aroudtheworldsumm">Aktivace funkce Okolo světa</string>
+    <string name="backgroundprocess">Procesy na pozadí</string>
+    <string name="downloading_data">Download dat</string>
+    <string name="nsummary2">Zobrazit aktuální počasí na Android hodinkách</string>
+    <string name="title_help_and_support">Pomoc a podpora</string>
+    <string name="wearnotification">Android hodinky</string>
+</resources>
