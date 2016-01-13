@@ -3,7 +3,7 @@ Android Weather App, made using the http://openweathermap.org/ API.
 Made for Network + JSON Parsing and Material Design Experiments.
 
 >####Note:
->Please add your Openweathermap Api Key in <A href=https://github.com/TomasKostadinov/AndroidWeatherApp/blob/master/app/src/main/java/com/tomaskostadinov/weatherapp/activity/BaseActivity.java">BaseActivity</a>. This step is required, otherwise the application will not receive any weather data.
+>Please add your Openweathermap Api Key in <A href="https://github.com/TomasKostadinov/AndroidWeatherApp/blob/master/app/src/main/java/com/tomaskostadinov/weatherapp/activity/BaseActivity.java">BaseActivity</a>. This step is required, otherwise the application will not receive any weather data.
 
 ## Screenshots
 <img src="http://i.imgur.com/rRfg6b7.jpg" alt="Screenshot"/>
