@@ -6,7 +6,7 @@ Android WeatherApp, using the http://openweathermap.org/ API. Made for Network +
 The Material Design Weather App.
 ## License
 
-##### Copyright 2015 Tomas Kostadinov
+##### Copyright 2015-2016 Tomas Kostadinov
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
