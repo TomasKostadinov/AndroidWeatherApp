@@ -1,5 +1,5 @@
-# AndroidWeatherApp
-Android WeatherApp, using the http://openweathermap.org/ API.
+# Material Weather
+Android Weather App, made using the http://openweathermap.org/ API.
 Made for Network + JSON Parsing and Material Design Experiments.
 
 >####Note:
