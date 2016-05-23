@@ -1,21 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="greenColorPrimary">#009687</color>
-    <color name="greenColorPrimaryDark">#005A51</color>
-    <color name="blueColorPrimary">#4C84B6</color>
-    <color name="blueColorPrimaryDark">#3D6A92</color>
-    <!--<color name="colorPrimary">#2C333D</color>-->
-    <color name="darkColorPrimaryDark">#3D6A92</color>
-    <color name="colorPrimary">#607D8B</color>
-    <color name="colorPrimaryDark">#455A64</color><!--
-    <color name="colorPrimary">#C94C52</color>
-    <color name="colorPrimaryDark">#AB474B</color>-->
-    <color name="colorPrimaryLight">#D72027</color>
+    <color name="colorPrimary">#2196F3</color>
+    <color name="colorPrimaryDark">#1976D2</color>
+    <color name="colorPrimaryLight">#BBDEFB</color>
+    <color name="colorAccent">#FF5252</color>
+    <color name="primary_text">#212121</color>
+    <color name="secondary_text">#727272</color>
+    <color name="icons">#FFFFFF</color>
+    <color name="divider">#B6B6B6</color>
+
     <color name="textColorPrimary">#FFFFFF</color>
     <color name="windowBackground">#FFFFFF</color>
     <color name="navigationBarColor">#000000</color>
     <color name="colorAccentPrimary">#3498db</color>
-    <color name="colorAccent">#536DFE</color>
     <color name="cardBackground">#FFFFFF</color>
 
     <color name="card1">#E9B96D</color>
@@ -68,6 +65,5 @@
     <color name="sunnyWeather">#FFB300</color>
     <color name="warningWeather">#ff1744</color>
     <color name="badWeather">#455A64</color>
-
-
+    <color name="colorTransparent">#00000000</color>
 </resources>

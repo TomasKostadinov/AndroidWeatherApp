@@ -31,9 +31,9 @@ public class BaseActivity extends AppCompatActivity {
 
     // ==============================================
     /**
-     * IMPOERTANT: ADD YOUR OPENWEATHERMAPS API KEY HERE
+     * IMPORTANT: ADD YOUR OPENWEATHERMAPS API KEY HERE
      */
-    public String ApiKey = "KEY";
+    public String ApiKey = "KEYKEYKEYKEY";
 
     // ==============================================
     public Toolbar mToolbar;

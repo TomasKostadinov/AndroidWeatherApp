@@ -1,8 +1,8 @@
 <resources>
 
     <style name="GreenTheme" parent="MyMaterialTheme.Base">
-        <item name="colorPrimary">@color/greenColorPrimary</item>
-        <item name="colorPrimaryDark">@color/greenColorPrimaryDark</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 

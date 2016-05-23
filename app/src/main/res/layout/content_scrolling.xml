@@ -67,6 +67,7 @@
 
                             <ImageView
                                 android:scaleType="fitCenter"
+                                android:transitionName="@string/about"
                                 android:adjustViewBounds="true"
                                 android:layout_weight="1"
                                 android:layout_width="0dp"

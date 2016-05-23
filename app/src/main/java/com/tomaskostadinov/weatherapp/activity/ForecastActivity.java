@@ -18,9 +18,8 @@ import com.tomaskostadinov.weatherapp.helper.WeatherHelper;
 
 import org.apache.http.Header;
 
-
 /**
- * Created by Tomas on 03.06.2015.
+ * Created by Tomas on 03.06.2015
  */
 
 public class ForecastActivity extends AppCompatActivity {

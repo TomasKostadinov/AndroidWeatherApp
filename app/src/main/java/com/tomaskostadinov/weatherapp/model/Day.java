@@ -1,7 +1,7 @@
 package com.tomaskostadinov.weatherapp.model;
 
 /**
- * Created by Tomas on 03.08.2015.
+ * Created by Tomas on 03.08.2015
  */
 public class Day {
     public Integer time;

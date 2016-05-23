@@ -100,7 +100,6 @@ public class MainActivity extends BaseActivity{
 
         NotificationHelper = new NotificationHelper();
         WeatherHelper = new WeatherHelper();
-
         /**
          * Layouts
          */

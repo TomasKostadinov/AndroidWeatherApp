@@ -12,16 +12,17 @@ import com.tomaskostadinov.weatherapp.R;
 import com.tomaskostadinov.weatherapp.adapter.ForecastOverviewAdapter;
 import com.tomaskostadinov.weatherapp.model.Day;
 
-import org.apache.http.*;
+import org.apache.http.Header;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 
 /**
- * Created by Tomas on 31.05.2015
+ * Created by Tomas on 31.05.2015.
+ * Class for testing new desings, debug only
  */
-public class DailyForecastActivity extends BaseActivity {
+public class DailyForecastActivity2 extends BaseActivity {
 
     public ArrayList<Day> items;
     ForecastOverviewAdapter adapter;
@@ -76,7 +77,7 @@ public class DailyForecastActivity extends BaseActivity {
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
                 // called when response HTTP status is "4XX" (eg. 401, 403, 404)
-                Toast.makeText(DailyForecastActivity.this, "Fail", Toast.LENGTH_SHORT).show();
+                Toast.makeText(DailyForecastActivity2.this, "Fail", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -89,6 +90,7 @@ public class DailyForecastActivity extends BaseActivity {
     public void ParseData(String in) {
         try {
             JSONObject reader = new JSONObject(in);
+            JSONObject city = reader.getJSONObject("city");
             JSONArray list = reader.getJSONArray("list");
             JSONObject JSONList = list.getJSONObject(0);
             for (int i = 0; i < list.length(); i++) {
@@ -96,11 +98,11 @@ public class DailyForecastActivity extends BaseActivity {
                 JSONArray forWeather = forJSONList.getJSONArray("weather");
                 JSONObject forJSONWeather = forWeather.getJSONObject(0);
                 JSONObject fortemp = forJSONList.getJSONObject("temp");
-                Log.i("RecyclerView", "JSON Parsing Nr." + i);
+                Log.i("RecyclerView", "JSON Parsing Nr. " + i);
                 items.add(new Day(forJSONList.getInt("dt"), fortemp.getDouble("max"), fortemp.getDouble("min"), forJSONList.getDouble("pressure"), forJSONList.getInt("humidity"), forJSONWeather.getInt("id"), forJSONWeather.getString("description"), forJSONList.getDouble("speed")));
                 Log.i("RecyclerView", "Added items Nr" + i);
                 adapter.notifyItemInserted(0);
-                Log.i("RecyclerView", "notifyItemInserted Nr." + i);
+                Log.i("RecyclerView", "notifyItemInserted Nr. " + i);
             }
         } catch (Exception e) {
             e.printStackTrace();

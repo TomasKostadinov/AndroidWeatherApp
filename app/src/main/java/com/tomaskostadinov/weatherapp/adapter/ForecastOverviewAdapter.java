@@ -1,7 +1,11 @@
 package com.tomaskostadinov.weatherapp.adapter;
 
+import android.app.Activity;
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
+import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
@@ -11,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.tomaskostadinov.weatherapp.R;
@@ -33,6 +38,7 @@ public class ForecastOverviewAdapter extends RecyclerView.Adapter<ForecastOvervi
     // Provide a direct reference to each of the views within a data item
     // Used to cache the views within the item layout for fast access
     public static class ViewHolder extends RecyclerView.ViewHolder {
+
         // Your holder should contain a member variable
         // for any view that will be set as you render a row
         public TextView tvDayName;
@@ -40,7 +46,7 @@ public class ForecastOverviewAdapter extends RecyclerView.Adapter<ForecastOvervi
         public TextView tvTemperature;
         public TextView tvMaxTemp, tvMinTemp;
         public ImageView ivWeatheric;
-        public CardView cvCard;
+        public LinearLayout cvCard;
         // We also create a constructor that accepts the entire item row
         // and does the view lookups to find each subview
         public ViewHolder(View itemView) {
@@ -49,7 +55,7 @@ public class ForecastOverviewAdapter extends RecyclerView.Adapter<ForecastOvervi
             this.tvDescription = (TextView) itemView.findViewById(R.id.tvHome);
             this.tvTemperature = (TextView) itemView.findViewById(R.id.genre);
             this.ivWeatheric = (ImageView) itemView.findViewById(R.id.Stat);
-            this.cvCard = (CardView) itemView.findViewById(R.id.daycard);
+            this.cvCard = (LinearLayout) itemView.findViewById(R.id.daycard);
         }
     }
 
@@ -90,7 +96,7 @@ public class ForecastOverviewAdapter extends RecyclerView.Adapter<ForecastOvervi
         holder.tvTemperature.setText(temp + "°");
         holder.ivWeatheric.setImageResource(weatherHelper.convertWeather(songs.weatherid));
 
-        holder.cvCard.setCardBackgroundColor(context.getResources().getColor(WeatherHelper.convertWeatherToColor(songs.weatherid)));
+        holder.cvCard.setBackgroundColor(context.getResources().getColor(WeatherHelper.convertWeatherToColor(songs.weatherid)));
     }
 
     // Return the total count of items
@@ -101,12 +107,21 @@ public class ForecastOverviewAdapter extends RecyclerView.Adapter<ForecastOvervi
 
     @Override
     public void onClick(View v){
+        Activity activity = (Activity) context;
         Log.i("onClick", "on View: " + v.toString());
-
-        Intent i = new Intent(context.getApplicationContext(), ScrollingActivity.class);
-        Integer id = 1;
-        i.putExtra("id", id);
-        //context.startActivity(i);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            ImageView ivWeatheric = (ImageView) v.findViewById(R.id.Stat);
+            Intent i = new Intent(context.getApplicationContext(), ScrollingActivity.class);
+            Bundle bundle = ActivityOptions.makeSceneTransitionAnimation(activity, ivWeatheric, ivWeatheric.getTransitionName()).toBundle();
+            Integer id = 1;
+            i.putExtra("id", id);
+            context.startActivity(i, bundle);
+        } else {
+            Intent i = new Intent(context.getApplicationContext(), ScrollingActivity.class);
+            Integer id = 1;
+            i.putExtra("id", id);
+            context.startActivity(i);
+        }
     }
 }
 

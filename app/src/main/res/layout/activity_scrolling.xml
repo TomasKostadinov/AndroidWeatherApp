@@ -27,6 +27,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:layout_collapseMode="pin"
+                android:background="@android:color/transparent"
                 app:popupTheme="@style/MyMaterialTheme.PopupOverlay" />
 
         </android.support.design.widget.CollapsingToolbarLayout>

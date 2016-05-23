@@ -1,26 +1,23 @@
 package com.tomaskostadinov.weatherapp.activity;
 
-import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.CardView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.tomaskostadinov.weatherapp.R;
+import com.tomaskostadinov.weatherapp.helper.WeatherHelper;
 
 import org.apache.http.Header;
 
@@ -33,10 +30,9 @@ public class ScrollingActivity extends BaseActivity {
 
     public android.content.SharedPreferences prefs;
 
-    public SwipeRefreshLayout mSwipeRefreshLayout;
     public boolean retried = false, downloadSucessfull = false;
-
     Integer id;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -92,7 +88,6 @@ public class ScrollingActivity extends BaseActivity {
 
             @Override
             public void onStart() {
-                mSwipeRefreshLayout.setRefreshing(true);
             }
 
             @Override
@@ -102,7 +97,8 @@ public class ScrollingActivity extends BaseActivity {
                  */
                 String in = new String(response);
                 if (in != "") {
-                    WeatherHelper.ParseData(in);
+                    WeatherHelper = new WeatherHelper();
+                    WeatherHelper.ParseDataSingle(in);
                     Log.i("WeatherData", "WeatherData Parsed");
                     UpdateData(not);
                     Log.i("WeatherData", "WeatherData Updated");
@@ -119,7 +115,6 @@ public class ScrollingActivity extends BaseActivity {
                  */
                 currloc.setText("No Internet Connection");
                 Log.e("WeatherData", "Download FAILED");
-                mSwipeRefreshLayout.setRefreshing(false);
                 if (!retried) {
                     new Handler().postDelayed(new Runnable() {
                         @Override
@@ -159,23 +154,14 @@ public class ScrollingActivity extends BaseActivity {
         windspeed.setText(WeatherHelper.getSpeed().toString() + " km/h");
         hum.setText(WeatherHelper.getHumidity().toString() + "%");
         press.setText(WeatherHelper.getPressure().toString() + " mBar");
-        tomorrow_temp.setText(String.format("%.1f", WeatherHelper.getTomorrow_temp()) + "°");
-        tomorrow_desc.setText(WeatherHelper.getTomorrow_desc());
-        //Integer t = WeatherHelper.getSunrise();
-        //sunr.setText(WeatherHelper.convertTime(t) + " Uhr");
-        //suns.setText(WeatherHelper.convertTime(WeatherHelper.getSunset().toString()) + " Uhr");
         /**
          * Setting Sun/Cloud/... Image from converted weather id
          */
         card.setCardBackgroundColor(getResources().getColor(WeatherHelper.convertWeatherToColor(WeatherHelper.getWeatherId())));
-        card_tomorrow.setCardBackgroundColor(getResources().getColor(WeatherHelper.convertWeatherToColor(WeatherHelper.getTomorrowWeatherId())));
+        //mToolbar.setBackgroundColor(getResources().getColor(WeatherHelper.convertWeatherToColor(WeatherHelper.getWeatherId())));
         todayStat.setImageResource(WeatherHelper.convertWeather(WeatherHelper.getWeatherId()));
-        tomorrowStat.setImageResource(WeatherHelper.convertWeather(WeatherHelper.getTomorrowWeatherId()));
         if(notification){
             sendNotification();
-        }
-        if(mSwipeRefreshLayout.isRefreshing()){
-            mSwipeRefreshLayout.setRefreshing(false);
         }
     }
 
